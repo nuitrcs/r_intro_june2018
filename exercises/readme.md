@@ -1,0 +1,1 @@
+The exercises in this directory are done during the workshop.  See the coreexercises directory for practice problems.  

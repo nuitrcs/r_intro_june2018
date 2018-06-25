@@ -1,0 +1,25 @@
+---
+title: 'R: Introduction'
+author: "Christina Maimone"
+date: "2018-06-26"
+output: 
+  tint::tintPdf:
+    includes:
+      before_body: formatting/noindent.tex
+---
+
+```{r, echo=FALSE}
+library(knitr)
+```
+
+
+# Workshop Materials
+
+https://github.com/nuitrcs/r_intro_june2018
+
+## Instructions/Help
+
+* Software installation: https://sites.northwestern.edu/summerworkshops/resources/software-installation
+* Downloading from GitHub: https://sites.northwestern.edu/summerworkshops/resources/downloading-from-github/
+
+
