@@ -1,0 +1,134 @@
+---
+title: "Intro to R: Visualization Basics"
+author: "Christina Maimone"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+params:
+  notes: no
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+notes<-params$notes
+```
+
+# Setup
+
+Load gapminder data from the package of the same name.  You may need to install the package.
+
+```{r}
+library(gapminder)
+data(gapminder)
+```
+
+`gapminder` has information on life expectancy, GDP per capita, and population for countries every 5 years, 1952 to 2007, with countries grouped by continent:
+
+```{r}
+head(gapminder)
+```
+
+
+
+# Overview
+
+There are a few different ways to make plots in R.  The two most common methods currently are the built-in base R plotting functions and the `ggplot2` package from the tidyverse.  There is a third system, from a package called `lattice`, that you might hear of, but it isn't as widely used currently.  
+
+Here we're just going to work with base R plotting functions.
+
+You may want to ultimatley use the `ggplot2` package instead.  There are examples and exercises with the [`ggplot` focused workshop](https://github.com/nuitrcs/ggplotworkshop).
+
+There are also lots of specialized visualization packages that build on the basics to do particular tasks.
+
+
+# Visualization with Base R 
+
+A good reference, by David Gerard, is at https://dcgerard.github.io/stat234/base_r_cheatsheet.html.  There's a lot more information there.  There are just a few example plots below here.
+
+Base plotting functions are good for quick exploratory plots, but the defaults aren't really publication ready.  One main criticism of the built in plotting functions is that each type of plot is made in its own way with its own options.  
+
+## Histogram
+
+A histogram
+
+```{r}
+hist(gapminder$lifeExp[gapminder$year==2007])
+```
+
+We can change the number of bins
+
+```{r}
+hist(gapminder$lifeExp[gapminder$year==2007], breaks=30)
+```
+
+You can also change where the breaks are, and the axis limits
+
+```{r}
+hist(gapminder$lifeExp[gapminder$year==2007],
+     breaks=seq(37.5, 87.5, 5), # where bins break (also determines number)
+     xlim=c(35, 90)) # xaxis limits
+```
+
+And clean up labels
+
+```{r}
+hist(gapminder$lifeExp[gapminder$year==2007],
+     breaks=seq(37.5, 87.5, 5), 
+     xlim=c(35, 90),
+     xlab="Number of Countries",
+     ylab="Life Expectancy",
+     main="2007 Gapminder Data") 
+```
+
+This is a reasonable plot to look at, but we might want to see what the distribution looks like based on course or gender.  This can be done, but, with base R, it's definitely not a topic for a beginner workshop. 
+
+## Scatterplot
+
+We'll use the `gapminder` data here and make a scatterplot of life expectancy and GDP per capita in 2002.
+
+```{r}
+plot(x=gapminder$gdpPercap[gapminder$year==2002], 
+     y=gapminder$lifeExp[gapminder$year==2002])
+```
+
+Looks like there's an exponential function here.  Log GDP per capita.  
+
+```{r}
+plot(x=gapminder$gdpPercap[gapminder$year==2002], 
+     y=gapminder$lifeExp[gapminder$year==2002],
+     log="x")
+```
+
+This `log` argument can be found in the help page for `plot.default`.
+
+Make point size a function of population.  Use a formula to scale relatively to area, not diameter.  Use transparency for overlapping points.  
+
+```{r}
+plot(x=gapminder$gdpPercap[gapminder$year==2002], 
+     y=gapminder$lifeExp[gapminder$year==2002],
+     log="x",
+     pch=16, cex=sqrt(1e-7*gapminder$pop[gapminder$year==2007]/pi),
+     col=rgb(.2, 0, .8, alpha=.3))
+```
+
+
+## Save
+
+There's an export button in the plot window; otherwise you have to plot to a specific graphics device.
+
+```{r, eval=FALSE}
+pdf("plot1.pdf", width=6, height=4)
+plot(x=gapminder$gdpPercap[gapminder$year==2002], 
+     y=gapminder$lifeExp[gapminder$year==2002],
+     log="x")
+dev.off()
+```
+
+

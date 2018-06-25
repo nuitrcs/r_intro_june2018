@@ -1,0 +1,482 @@
+---
+title: "Intro to R: Fundamentals and Data Types"
+author: "Christina Maimone"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+params:
+  notes: no
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+notes<-params$notes
+```
+
+# Some Basics
+
+A good reference for R Basics is the [Base R Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf).
+
+To run a line of code from a script file in RStudio:
+
+* *MAC*: `command + return`
+* *PC*: `Ctrl + r`
+
+## Arithmetic 
+```{r}
+2+2
+5%%2
+3.452*6
+2^4
+```
+
+You can use `?Arithmetic` to pull up the help for arithmetic operators.
+
+```{asis, echo=notes}
+_If you type an incomplete command, R will wait for you to finish it.  You can spread commands over multiple lines as long as you break the code so that a line isn't a complete command.  The + sign at the beginning of the line in the console indicates a continued command._
+```
+
+
+## A few functions
+
+Functions are called with `functionName(parameters)`.  Multiple paramters are comma-separated.  Paramters can be named. For unnamed parameters, the order matters.  R functions don't change the objects passed to them (more on this later).
+
+```{r}
+log(10)
+log(16, base=2)
+log10(10)
+sqrt(10)
+exp(10)
+sin(1)
+```
+
+## Comparisons
+
+```{r}
+1 < 2
+TRUE == FALSE
+'a' != "Boy" # not equal
+```
+
+Note that character vectors/strings can use single or double quotes.
+
+### Caution
+
+A point of caution.  As in other programs, numbers have finite precision:
+
+```{r}
+1/49 * 49 == 1
+```
+
+You can use `near()` to check if numbers are equal within a small tolerance:
+
+```{r}
+near(1 / 49 * 49, 1)
+```
+
+
+## Logical Operators
+
+`&` is and, and `|` is or, and `!` is not: 
+
+```{r}
+TRUE & FALSE
+!TRUE & FALSE
+TRUE | FALSE
+(2 > 1) & (3 > 2)
+```
+
+You use these to join together conditions.
+
+## Variables
+
+Use the `<-` operator to assign values to variables.  `=` also works but is bad practice and less common.
+
+The right hand side of the assignment can be any valid R expression. The right hand side is fully evaluated before the assignment occurs.
+
+Variable names can contain letters, numbers, underscores and periods. They cannot start with a number; they should not start with an underscore or period in regular use.  They cannot contain spaces. Different people use different conventions for long variable names, these include
+
+- periods.between.words
+- underscores_between_words
+- camelCaseToSeparateWords
+
+
+```{r}
+x <- 4
+x
+y <- 3/10
+y
+x + y
+myVariable <- x <- 3 + 4 + 7
+```
+
+```{asis, echo=notes}
+_When you create a variable, it shows up in the environment window._
+```
+
+## Comments
+
+The comment character is `#`.  It can be used anywhere on a line to comment out the rest of the line.  In this document, `##` in a white cell denotes an output cell, not commented commands.
+
+## Data Types
+
+There are a few types of data in R:
+
+* logical: `TRUE` or `FALSE`
+* integer: a specific type; most numbers are numeric instead
+* numeric: real or decimal 
+* complex: ex: `2+5i`
+* character: `"text data"`, denoted with single or double quotes
+
+```{r}
+typeof(TRUE)
+typeof("foo")
+```
+
+
+## Vectors
+
+Vectors are also called arrays.  You can create a vector with the `c()` function.  `c` stands for combine.
+
+```{r}
+1:5
+x<-1:5
+x<-c(1,2,3,4,5)
+```
+
+Vectors can only have one type of values in them.  The order depends on what types can be converted to other types.  If there's multiple types, everything in a vector will be converted to the type of the lowest in this list:
+
+* logical
+* integer
+* numeric
+* complex
+* character
+
+```{r}
+x<-c(TRUE, 2, 4.3)
+x
+x<-c(4, "alpha", TRUE)
+x
+```
+
+
+Functions and arithmetic operators can apply to vectors as well:
+
+```{r}
+x<-1:5
+x+1
+x*2
+x*x
+log(x)
+x < 5
+```
+
+Some functions will apply to each element of a vector, but others take a vector as a parameter:
+
+```{r}
+sum(x)
+var(x)
+```
+
+Vectors are one-dimensional and can't be nested:
+
+```{r}
+c(c(1,2,3), 4, 5)
+```
+
+Vector indexes (and all other indexes in R) start with 1, not 0:
+
+```{r}
+x<-c('a', 'b', 'c', 'd', 'e')
+x[1]
+```
+
+You can take slices of vectors
+
+```{r}
+x[1:3]
+```
+
+Or exclude values with a negative sign:
+
+```{r}
+x[-1]
+```
+
+Elements are returned in the order that the indices are supplied:
+
+```{r}
+x[c(5,1)]
+```
+
+
+You can use a vector of integers or booleans to select from a vector as well:
+
+```{r}
+x[x<'c']
+x[c(1,3,5)]
+```
+
+Get the length of a vector with `length`
+
+```{r}
+length(x)
+```
+
+See if a value is in a vector with `%in%`
+
+```{r}
+'b' %in% x
+```
+
+Or get the first position of one or more elements in a vector with the `match` function
+
+```{r}
+match(c('b', 'd', 'k'), x)
+```
+
+Use `which` to find all positions:
+
+```{r}
+y <- c(1:3, 1:3)
+which(y == 3)
+```
+
+
+You can also name the elements of a vector
+
+```{r}
+x<-1:5
+names(x)<-c("Ohio","Illinois","Indiana","Michigan","Wisconsin")
+x
+```
+
+Which allows you to select values from the vector using the names:
+
+```{r}
+x["Ohio"]
+x[c("Illinois", "Indiana")]
+```
+
+
+## Missing Data (`NA`)
+
+Missing data in R is encoded as `NA`.  You can test for `NA` (`is.na`).  Some functions will ignore `NA` when doing computations.  Others will ignore missing values if you tell them to.  Others will process `NA` and give you a result of `NA`.  
+
+```{r}
+tmp<-c(1,2,5,NA,6,NA,2,5,1,1,NA,5)
+is.na(tmp)
+```
+
+Or you can get the index location of the missing observations within the vector (useful for later selecting observations in your dataset)
+
+```{r}
+which(is.na(tmp))
+```
+
+
+It can also be useful to count `NA` in a vector:
+
+```{r}
+sum(is.na(tmp))
+```
+
+Why does this work?  How can you sum logical values?  This takes advantage of the trick that TRUE=1 and FALSE=0.  The function call tries to convert the logicals to numeric, and this is how the conversion works:
+
+```{r}
+as.numeric(c(TRUE, FALSE))
+```
+
+You can also see which observations are missing:
+
+```{r}
+which(is.na(tmp))
+```
+
+This gives the indices of the `NA` values in the vector.  
+
+Remember that different functions treat `NA` differently:
+
+```{r}
+mean(tmp)
+```
+
+`mean` results in `NA`.  It has an option to exclude missing:
+
+```{r}
+mean(tmp, na.rm=TRUE)
+```
+
+`table` behaves differently:
+
+```{r}
+table(tmp)
+```
+
+It excludes `NA` by default.  You have to tell it to include `NA`:
+
+```{r}
+table(tmp, useNA = "ifany")
+```
+
+
+
+## Other Special Values
+
+### NULL
+
+`NULL` is another special type. `NULL` is usually used to mean undefined.  You might get it when a function can't compute a result.  `NULL` is a single value and can't be in a vector.  (`NA`s can be in vectors and data.frames.)  
+
+```{r}
+c()
+c(NULL, NULL)
+```
+
+The above somewhat surprisingly gives a single `NULL` because of the restrictions on how it's used.  
+
+`NULL` should not be used for missing data.
+
+### `NaN`, `Inf`
+
+`NaN` is not a number.
+
+```{r}
+0/0
+```
+
+`Inf` and `-Inf` are infinity and negative infinity
+
+```{r}
+1/0
+-1/0
+```
+
+
+## Factors {#factors}
+
+Factors are a special type of vector can be used for categorical variables.  
+
+```{r}
+mycolors<-c("red", "blue", "green", "red", "red", "blue")
+mycolors<-factor(mycolors) # infers levels from the data
+mycolors
+```
+
+Factors have a limited set of values they can take.  The set of acceptable values are the levels:
+
+```{r}
+levels(mycolors)
+```
+
+Trying to assign a value other than the levels will give an error.
+
+```{r}
+mycolors[1]<-"pink"
+```
+
+This gives an error because "pink" wasn't one of the levels for the factor.  To fix this:
+
+```{r}
+levels(mycolors)<-c(levels(mycolors), "pink")
+mycolors[1]<-"pink"  ## now you can set pink as a value
+mycolors
+```
+
+The above works because the levels aren't ordered, and we added pink to the end.  To add an ordered level, best to remake the factor (you can do the below with unordered too).  the `factor` function will convert `mycolors` in the example below back to character data before creating the new factor
+
+```{r, eval=FALSE}
+mycolors<-factor(mycolors, levels=c(levels(mycolors), "pink")) 
+mycolors[1]<-"pink"
+```
+
+Factors can be ordered.  Ordering factors can help with setting the display order in plots, tables, statistical output, etc.
+
+Factors are stored as integers:
+
+```{r}
+typeof(mycolors[1])
+```
+
+Even if you don't plan to use categorical data, you should know that factors exist because when reading data into R, text strings can be loaded as factors.
+
+
+# Workspace Management
+
+List objects in your workspace
+
+```{r, eval=FALSE}
+ls()
+```
+
+Or look in the Environment window in the upper right in RStudio.
+
+You can remove objects from your workspace:
+
+```{r}
+myVariable <- 1:10
+rm(myVariable)
+```
+
+Or clear your entire workspace (can't be undone):
+
+```{r, eval=FALSE}
+rm(list = ls())
+```
+
+You can also clear your workspace by clicking on the broom in the Environment window in RStudio.
+
+You can save an image of your entire workspace to pick up where you left off in another session of R (this is what R asks you if you want to do when you quit).  Workspace files are saved with the extension .RData.
+
+```{r, eval=FALSE}
+save.image("20170112.RData")
+```
+
+You can load this file later with the `load` function
+
+```{r, eval=FALSE}
+load("20170112.RData")
+```
+
+Note that `load` will overwrite any objects already in your workspace that have the same names as objects in the file you are loading.  I don't recommend using `save` and `load` for final or datasets.  For that, it's generally better to save specific data files in common formats (like CSV) instead.  Use `save` and `load` to save data at intermediate stages of analysis -- when you wouldn't be passing the data outside of R.
+
+
+# Packages
+
+Much of R's power comes from contributed packages.  You can install and manage packages using the Packages tab in the bottom right window in RStudio.  Or you can install packages with a command:
+
+```{r, eval=FALSE}
+install.packages("tidyverse")
+```
+
+Note that `tidyverse` is a composite package that will install multiple component packages and their dependencies.  You'll get a lot of messages as the installation happens.
+
+CRAN (Comprehensive R Archive Network) is the name of the package repository.  There are [mirrors](https://cran.r-project.org/mirrors.html) around the world.
+
+If you have trouble or get errors when trying to install a package, you might need to specify the repository mirror to download from:
+
+```{r, eval=FALSE}
+install.packages("tidyverse", repos="http://cran.wustl.edu/")
+```
+
+After you install a package, you have to load it with the `library` function to actually use it.
+
+```{r}
+library(tidyverse)
+```
+
+A note on `tidyverse`: when you install `tidyverse`, it installs more packages than are loaded with `library(tidyerse)`.  One example is `lubridate`.  It was installed with `tidyverse`, but you'll have to load it separately to use it: `library(lubridate)`.
+
+Other packages, that we might use later:
+
+```{r, eval=FALSE}
+install.packages(c("gapminder"))
+```
+
+

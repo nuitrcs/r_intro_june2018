@@ -1,0 +1,265 @@
+---
+title: "Intro to R: Data Structures"
+author: "Christina Maimone"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+params:
+  notes: no
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+notes<-params$notes
+```
+
+
+This is Part 2 of the Intro to R workshop materials.
+
+# Data Structures
+
+How to represent data sets
+
+## Lists
+
+Lists are a bit like complex vectors.  An element of a list can hold any other object, including another list.  You can keep multi-dimensional and ragged data in R using lists.  
+
+```{r}
+l1 <- list(1, "a", TRUE, 1+4i)
+l1
+```
+
+```{r}
+l2 <- list(title = "Research Bazaar", numbers = 1:10, data = TRUE )
+l2
+```
+
+Indexing lists is a little different.  ``[[1]]`` is the first element of the list as whatever type it was.  ``[1]`` is a subset of the list -- the first element of the list as a list.  You can also access list elements by name.
+
+```{r}
+l2$numbers
+l2[[2]]
+l2[2]
+```
+
+
+## Matrices
+
+Matrices in R are two-dimensional arrays.  All values of a matrix must be of the same type.
+
+```{r}
+matrix(c('a', 'b', 'c', 'd'), nrow=2)
+y<-matrix(1:25, nrow=5, byrow=TRUE)
+y
+```
+
+Matrices are used sparingly in R, primarly for numerical calculations or explicit matrix manipulation.
+
+You can attach names to rows and columns.
+
+Matrix algebra functions are available:
+
+```{r}
+y%*%y
+x<-1:5
+y%*%x
+y^-1 # matrix inversion
+y * -1
+```
+
+Elements in a matrix are indexed like `mat[row, col]`.  Omitting a value for row or column will give you the entire column or row, respectively.
+
+```{r}
+y[1,1]
+y[1,]
+y[,1]
+y[1:2,3:4]
+y[,c(1,4)]
+```
+
+Using just a single index will get the element from the specified position, if the matrix were turned into a vector first:
+
+```{r}
+w<-matrix(5:29, nrow=5)
+w[7]
+c(w)[7]
+```
+
+
+## Data Frames
+
+Data frames are the core data structure in R.  A data frame is a list of named vectors with the same length.  Columns are typically variables and rows are observations.  Different columns can have different types of data:
+
+```{r}
+id<-1:20
+id
+color<-c(rep("red", 3), rep("green",10), rep("blue", 7))
+color
+score<-runif(20)
+score
+df<-data.frame(id, color, score)
+df
+```
+
+Instead of making individual objects first, we could do it all together:
+
+```{r}
+df<-data.frame(id=1:20, 
+               color=c(rep("red", 3), rep("green",10), rep("blue", 7)),
+               score=runif(20))
+```
+
+
+Data frames can be indexed like matrices to retrieve the values.  
+
+```{r}
+df[2,2]
+df[1,]
+df[,3]
+```
+
+You can use negative values when indexing to exclude values:
+
+```{r}
+df[,-2]
+df[-1:-10,]
+```
+
+You can also use the names of the columns after a `$` or in the indexing:  
+
+```{r}
+df$color
+```
+
+Indexing into a data frame with a single integer or name of the column will give you the column(s) specified as a new data frame.
+
+```{r}
+df['color']
+df[2:3]
+```
+
+Instead of index numbers or names, you can also select values by using logical statements.  This is usually done with selecting rows. 
+
+```{r}
+df[df$color == "green",]
+df[df$score > .5,]
+df[df$score > .5 & df$color == "blue",]
+```
+
+
+You can assign names to the rows of a data frame as well as to the columns, and then use those names for indexing and selecting data.
+
+```{r}
+rownames(df)
+```
+
+You can add columns or rows simply by assigning values to them.  There are also `rbind` and `cbind` (for row bind and column bind) functions that can be useful.
+
+```{r}
+df$year<-1901:1920
+df
+```
+
+```{r}
+df[22,]<-list(21, "green", 0.4, 1921)
+```
+
+Note that we had to use a list for adding a row because there are different types.
+
+
+## Viewing Matrices and Data Frames
+
+You can use the `View` function to open a spreadsheet-style view of a matrix or data frame.  Use the `View` function, or double-click on the name of the object in the Environment tab in the upper right window in RStudio.
+
+You can also use the `head` function to see the first 6 (by default) rows of a matrix or data frame:
+
+```{r}
+head(df)
+```
+
+You can get dimensions with:
+
+```{r}
+dim(y)
+dim(df)
+nrow(y)
+ncol(df)
+```
+
+The `length` of a matrix is the number of elements.  The `length` of a data frame is the number of columns:
+
+```{r}
+length(y)
+length(df)
+```
+
+
+
+# Advanced: Data Structures from Packages
+
+Packages can create their own data structures to hold data.  These objects can have methods and behaviors that are defined by the package.  At this point, just be aware that such a thing can exist.
+
+Two common objects/data structures from popular packages that you are likely to encounter at some point are a `tibble` and a `data.table`, both of which are "enhanced" `data.frame`s.  
+
+## `tibble`
+
+A `tibble` is the Tidyverse's version of the `data.frame`.  The Tidyverse is a set of packages from RStudio that all work together in consistent ways.  Together, these packages dramatically change the way that some users work with their data in R.  The `tibble`, in most cases, works like a `data.frame`.  You can interact with it as a `data.frame` for selecting and subsetting data.  But the `tibble` package attempts to standardize some of the aspects of working with a data frame that are inconsistent, such as what's returned when you use `[]` to subset data.  
+
+The most noticeable difference from a data frame is how they print to the console:
+
+```{r}
+library(tibble)
+```
+
+```{r}
+df
+as.tibble(df)
+```
+
+But note also the difference with `[]`.  Subsetting a `tibble` always gives you a `tibble`, but you can still get individual columns with `$`.
+
+```{r}
+df[,1]
+as.tibble(df)[,1]
+as.tibble(df)$id
+```
+
+Tibbles will be relevant if you use packages in the tidyverse (which we will shortly), because they generally return tibbles.
+
+For more on `tibble`s, see 
+
+* http://r4ds.had.co.nz/tibbles.html
+* `vignette("tibble")`
+
+
+## `data.table`
+
+`data.table` is another alternative to standard data frames that focuses on performance (speed and memory use).  It overwrites the subsetting syntax to allow additional functionality for grouping, slicing, and summarizing data.  It's best not to mix `data.table` with the tidyverse, as they both redefine some of the same functions.
+
+```{r, eval=FALSE}
+install.packages("data.table")
+```
+
+```{r}
+library(data.table)
+```
+
+```{r}
+mtcars_dt <- as.data.table(mtcars) # mtcars is built-in data
+mtcars_dt[mpg > 20,]  # conditionals without data.table name as a prefix
+```
+
+If you're working with very large data sets, and performance becomes an issue, then try out `data.table`.  This workshop doesn't cover it, focusing on the tidyverse instead.
+
+[`data.table` cheat sheet](https://s3.amazonaws.com/assets.datacamp.com/blog_assets/datatable_Cheat_Sheet_R.pdf) from DataCamp
+
+[`data.table`](https://github.com/Rdatatable/data.table/wiki) website
+
+Note that `data.table` is different from the `DT` package which provides a function `datatable` to work with the JavaScript DataTables package.

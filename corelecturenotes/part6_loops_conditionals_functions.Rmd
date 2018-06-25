@@ -1,0 +1,251 @@
+---
+title: "Intro to R: Loops, Conditionals, Functions"
+author: "Christina Maimone"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+params:
+  notes: no
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+notes<-params$notes
+```
+
+
+# Loops and Conditionals
+
+Two tools for manipulating data are conditional statements and loops.  Conditional if/then/else statements let us take different actions based on the value of variables.
+
+## If/then/else
+
+As an example, sample a random number from a Poisson distribution with a mean (lambda) of 8.  Print a message if it's greater than or equal to 10.
+
+```{r}
+x <- rpois(1, lambda=8)
+
+if (x >= 10) {
+  print("x is greater than or equal to 10")
+}
+x
+```
+
+Some of you may have gotten different answers.  Try executing the code again.  
+
+We can avoid the randomness (useful in finding errors in our code and making the code reproducible) by setting the random seed.  Let's also add some else statements.
+
+```{r}
+set.seed(10)
+x <- rpois(1, lambda=8)
+
+if (x >= 10) {
+  print("x is greater than or equal to 10")
+} else if (x > 5) {
+  print("x is greater than 5")
+} else {
+  print("x is less than 5")
+}
+x
+```
+
+Now everyone should get the same answer.
+
+One point with if...else that trips some people up is that the conditional test in `if()` is a single value -- NOT a vector.  The following gives a warning and unexpected output:
+
+```{r, warnings=TRUE, errors=TRUE}
+y<-1:10
+if (y < 5) {
+  print(paste(y, "is less than 5"))
+} else {
+  print(paste(y, "is >= 5"))
+}
+```
+
+The warning message "the condition has length > 1 and only the first element will be used" comes from using y, which is a vector, in the if statement.  `y < 5` produces a vector of TRUE and FALSE values: `r y<5`.  The warning message is telling you that only the first value of that vector matters, which in this case is TRUE.  Because it is TRUE, we're in the first part of the if statement with `print(paste(y, "is less than 5"))`.  The `paste` function concatenates two pieces of text.  It allows vectors as input.  So in this case, it takes the entire y vector (all of the values in it), and pastes each value with "is less than 5", leading to the output you see above.  To have the if statement evaluated for each value of the y vector, you'd need to put it inside a loop, which we'll get to next.
+
+There is, however, a shorthand `ifelse` function that does work on vectors and is useful for recoding data.  
+
+```{r}
+mydata<-data.frame(val=1:10)
+mydata$category<-ifelse(mydata$val<4, "low", "not low")
+mydata
+```
+
+This example created a new variable, but you can save the results back to the same variable if you're trying to change values in the same object.  
+
+We can nest the `ifelse` statements too
+
+```{r}
+mydata$category<-ifelse(mydata$val<4, "low", 
+                        ifelse(mydata$val<8, "medium", "high"))
+mydata
+```
+
+And, an example fixing the broken example above:
+
+```{r}
+ifelse(y < 5, paste(y, "is less than 5"), paste(y, "is >= 5"))
+```
+
+
+## Loops
+
+We can also repeat the same thing multiple times for different values:
+
+```{r}
+for(i in 1:10){
+  print(i)
+}
+```
+
+```{r}
+for(i in c(2,3,5,7,11)) {
+  cat(i,"is prime!\n") 
+}
+```
+
+`cat` is like `print(paste())` but it doesn't automatically print a new line.
+
+We can nest for loops:
+
+```{r}
+for(i in 1:5){
+  for(j in c('a', 'b', 'c', 'd', 'e')){
+    print(paste(i,j))
+  }
+}
+```
+
+Rather than printing the results, we could write the loop output to a new object.
+
+```{r}
+output_vector <- c()
+for(i in 1:5){
+  for(j in c('a', 'b', 'c', 'd', 'e')){
+    temp_output <- paste(i, j)
+    output_vector <- c(output_vector, temp_output) # existing values plus the new one
+  }
+}
+output_vector
+```
+
+There are also `while` loops
+
+```{r}
+z <- 1
+while(z > 0.1){
+  z <- runif(1)
+  print(z)
+}
+```
+
+And let's fix the example that gave us warnings above in the if...else section:
+
+```{r}
+y<-1:10
+for (val in y) {
+  if (val < 5) {
+    print(paste(val, "is less than 5"))
+  } else {
+    print(paste(val, "is >= 5"))
+  }
+}
+```
+
+Or, what if we wanted the iteration number and the values in a vector?
+
+```{r}
+y<-seq(3,6,.3)
+for (i in 1:length(y)) {
+  if (y[i] < 5) {
+    print(paste("Iteration",i,":", y[i], "is less than 5"))
+  } else {
+    print(paste("Iteration",i,":", y[i], "is >= 5"))
+  }
+}
+```
+
+
+# Apply Functions
+
+There are genuine reasons to write loops in R, but they execute slowly.  If you can find a way to use vectorized functions (meaning that the function takes in vectors, does something to each element, and returns a vector back), your code will run faster.  Unnecessary use of loops is the first thing I look for when code is running slowly.
+
+There are apply functions that apply a function across lists, matrices, data frames, and vectors.  The basic `apply` function will apply a specified function either to each row or column of an object it can treat as a matrix (so an all numeric data frame will work).
+
+```{r}
+x<-data.frame(first=LETTERS, second=LETTERS)
+apply(x, # data
+      1, # 1 = rows, 2 = columns
+      paste, # function
+      collapse="-") # extra arguments to function
+apply(x, 2, paste, collapse="-")
+```
+
+
+# Writing Functions
+
+You can define your own functions
+
+```{r}
+fahr_to_kelvin <- function(temp) {
+  kelvin <- ((temp - 32) * (5 / 9)) + 273.15
+  return(kelvin)
+}
+```
+
+```{r}
+fahr_to_kelvin(32)
+```
+
+You can define default values for parameters:
+
+```{r}
+increment <- function(a, step=1) {
+  return(a+step)
+}
+```
+
+```{r}
+increment(3)
+increment(3, 2)
+```
+
+Explicitly having a return value is good practice, but a function will return the the value produced by the final line (which could be null if the final line returns NULL, like is the case with `cat`):
+
+```{r}
+plusone <- function(a) {
+  a+1
+}
+plusone(2)
+```
+
+We can also create functions without naming them.  These are called anonymous functions.  They're most useful when you need to do a non-standard task as part of another function call.
+
+```{r}
+x <- matrix(1:25, ncol=5)
+apply(x, 1, function(x){x[2]}) 
+```
+
+All the above does is select the second column of data, so we wouldn't do that above to accomplish that, but it's how the syntax works.
+
+Also note above, that we've given a function as a parameter to another function.  Functions are objects that can be passed around.
+
+If you start writing a lot of functions, you might want to have a separate file with functions in it, and then source in that file:
+
+```{r, eval=FALSE}
+source("myfunctions.R")
+```
+
+The all of the functions (and any other objects you've defined) in the file you source will be available in your environment.
+
+If you want to learn more about functions in R (perhaps if you have a programming background in another language), see [Functions Tutorial](https://www.datacamp.com/community/tutorials/functions-in-r-a-tutorial) from DataCamp or [Functional Programming](http://adv-r.had.co.nz/Functional-programming.html) in Hadley Wickham's Advanced R book.
+
+

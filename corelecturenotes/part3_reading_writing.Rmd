@@ -1,0 +1,152 @@
+---
+title: "Intro to R: Reading and Writing Data and Files"
+author: "Christina Maimone"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+params:
+  notes: no
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+notes<-params$notes
+```
+
+This is Part 3 of the Intro to R workshop materials.
+
+
+
+# Reading and Writing Data
+
+## Working Directory
+
+Before reading or writing files, it's often useful to set the working directory first so that you don't have specify complete file paths.  
+
+You can go to the Files tab in the bottom right window in RStudio and find the directory you want.  Then under the More menu, there is an option to set the current directory as the working directory.  Or you can use the `setwd` command like:
+
+```{r, eval=FALSE}
+setwd("~/training/intror")  # ~ stands for your home directory
+setwd("/Users/username/Documents/workshop") # mac, absolute path example
+setwd("C:\Users\username\Documents\workshop") # windows, absolute path example
+getwd()
+```
+
+
+## Reading
+
+### Basics
+
+Read in a csv file and save it as a data frame with a name.  The example uses a url, but you can use a local file the same way by specifying a relative or absolute path.
+
+```{r}
+schooldata<-read.csv("https://goo.gl/f4UhMX")
+```
+
+```{r, eval=FALSE}
+View(schooldata)
+```
+
+
+You could also use the Import Dataset option in the Environment tab in the top right window in RStudio.
+
+Looking at the help for `read.csv`, there are a number of different options and different function calls.  `read.table`, `read.csv`, and `read.delim` all work in the same basic way and take the same set of arguments, but they have different defaults.  They will all read in a plain text, delimited file into a data frame though.  Key options to pay attention to include:
+
+* `header`: whether the first row of the file has the names of the columns
+* `sep`: the separator used (comma, tab (enter as `\t`), etc) in the file
+* `na.strings`: how is missing data encoded in your file?  "NA" are treated as missing by default; blanks are treated as missing by default in everything but character data.
+* `stringsAsFactors`: should strings (text data) be converted to factors or kept as is?  Example of this below.
+
+Let's redo the above with a better set of options
+
+```{r}
+schooldata<-read.csv("https://goo.gl/f4UhMX", 
+                     stringsAsFactors=FALSE, 
+                     strip.white=TRUE, 
+                     na.strings=c("NA", ""))
+```
+
+The option `na.strings` is needed now because while blanks are treated as missing by default in numeric fields (which includes factors), they aren't by default missing for character data.
+
+### `readr` Package
+
+Does all of the above seem annoying or unnecessarily complicated?  Others have thought so too.
+
+Look at the `readr` package (part of the tidyverse), which attempts to smooth over some of the annoyances of reading in file in R.  The main source of potential problems when using `readr` functions is that it guesses variable types from a subset of the observations, so if you have a strange value further down in your dataset, you might get an error or an unexpected value conversion.
+
+To read in the same data with the same settings as above, using `readr` (note similar function name, with `_` instead of `.`):
+
+```{r, message=TRUE}
+schooldata <- read_csv("https://goo.gl/f4UhMX")
+```
+
+Options used above are defaults in `readr`.  You get a long message about the column types.
+
+[`readr` website](http://readr.tidyverse.org/)
+
+### Reading Stata, SAS, or SPSS files
+
+Try the `haven` or `foreign` packages.
+
+### Reading Excel Files
+
+Use the `readxl` package.
+
+
+## Writing
+
+You will often want to save your work in R as well.  There are a few different ways to save:
+
+### Writing a data file
+
+The best method for making your workflow and analysis reproducible is to write any data sets you create to plain text files.
+
+To write a CSV, there are equivalent `write.csv` and `write.table` functions to the read.  The one trick is that you usually want to NOT write row.names.  You also may need to be careful about quotes: in school data, course titles can have quotes.
+
+```{r, eval=FALSE}
+write.csv(schooldata, file="schooldatacopy.csv", 
+          row.names=FALSE)
+```
+
+Or using `readr` equivalent, although quoting result is different, since `readr` only quotes as needed:
+
+```{r, eval=FALSE}
+write_csv(schooldata, "schooldatacopy.csv")
+```
+
+
+### Saving R objects
+
+You can use the `save` function to save multiple objects together in a file.  The standard file extension to use is `.RData`.  Example:
+
+```{r, eval=FALSE}
+save(df, schooldata, 
+     file = "workshopobjects.RData")
+```
+
+To later load in saved data, use the `load` function: 
+
+```{r, eval=FALSE}
+load("workshopobjects.RData")
+```
+
+This can be useful if you're working with multiple objects and want to be able to pick up your work easily later.  But`.RData` files generally aren't portable to other programs, so think of them only as internal R working files -- not the format you want to keep data in long-term.  Loading a `.RData` file will overwrite objects with the same name already in the environment.
+
+# Special Data Types
+
+`data.table` package also has functions for reading in data.  The `fread` function is relatively fast for reading a rectangular standardized data file into R.
+
+R also has packages for reading other structured files like XML and JSON, or interfacing with databases.  For more on using R with databases, see the R section of the [Databases workshop materials](https://github.com/nuitrcs/databases_workshop).  
+
+There are also multiple packages that make collecting data from APIs (either in general or specific APIs like the Census Bureau) easier.  
+
+There are also packages that interface with Google docs/drive and Dropbox, although those APIs change frequently, so beware when using those packages if they haven't been updated recently.  
+
+
