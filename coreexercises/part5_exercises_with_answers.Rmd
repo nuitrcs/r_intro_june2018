@@ -1,0 +1,88 @@
+---
+title: "Exercises Part 5: Visualization"
+author: "Christina Maimone"
+date: "`r Sys.Date()`"
+output: html_document
+params:
+    answers: TRUE
+---
+
+
+```{r, echo=FALSE, eval=TRUE}
+answers<-params$answers
+```
+
+```{r global_options, echo = FALSE, include = FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning = FALSE, message = FALSE,
+                      cache = FALSE, tidy = FALSE, size = "small")
+#knitr::opts_knit$set(root.dir=)
+```
+
+# Setup
+
+```{r}
+library(gapminder)
+data(gapminder)
+```
+
+---
+
+# Exercise: Make a Line Plot
+
+Using the `gapminder` data, make a line plot showing the population of Afghanistan over time.  Hint: for base R, look at the help for `plot.default` and the `type` parameter.  
+
+Make sure to clean up the x and y labels, and give your plot a title.
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+plot(x=gapminder$year[gapminder$country=="Afghanistan"], 
+     y=gapminder$pop[gapminder$country=="Afghanistan"],
+     type="l",
+     xlab="Year",
+     ylab="Population",
+     main="Afghanistan Population")
+
+```
+
+
+# Exercise: Histogram
+
+Make a histogram of life expectancies in 2007.  Make the historgram with each of 5, 10, 20, and 40 bins.  Does the number of bins change your interpretation of the data at all?  Do you see different trends?
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+## repeat, changing the number of breaks
+hist(gapminder$lifeExp[gapminder$year==2007], breaks=5)
+```
+
+```{asis, echo=answers, eval=answers}
+With more bins, ie becomes more obvious that there are at least two sets of countries in the data.  There's a cluster of high life expectancy, then a large spread of countries with lower life expectancy.
+```
+
+# Exercise: Scatter Plot
+
+Using the gapminder data, create a scatter plot of gdpPercap vs. population for year 1982.  Log the x axis (hint: argument `log="x"`).  Change the plot marker to a solid circle, color red, with a alpha value of .3.
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+## repeat, changing the number of breaks
+plot(x=gapminder$pop[gapminder$year==1982], 
+     y=gapminder$gdpPercap[gapminder$year==1982],
+     log="x",
+     pch=16, 
+     col=rgb(1,0,0, alpha=.3))
+```
+
+
+
+
+

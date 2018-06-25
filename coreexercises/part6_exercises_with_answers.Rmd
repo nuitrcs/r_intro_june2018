@@ -1,0 +1,376 @@
+---
+title: "Exercises Part 6"
+author: "Christina Maimone"
+date: "`r Sys.Date()`"
+output: html_document
+params:
+    answers: TRUE
+---
+
+
+```{r, echo=FALSE, eval=TRUE}
+answers<-params$answers
+```
+
+```{r global_options, echo = FALSE, include = FALSE}
+knitr::opts_chunk$set(echo=answers, eval=answers,
+                      warning = FALSE, message = FALSE,
+                      cache = FALSE, tidy = FALSE)
+```
+
+
+
+# Exercise: If Statement
+
+Use an if() statement to print a suitable message reporting whether there are any records from 2002 in the gapminder dataset. Now do the same for 2012.
+
+Hint: use the `any` function.
+
+```{r, echo=TRUE, eval=TRUE}
+library(gapminder) # install first if needed
+data(gapminder)
+```
+
+
+```{asis}
+### Answer
+```
+
+```{r}
+year<-2002
+if(any(gapminder$year == year)){
+   print(paste("Record(s) for the year",year,"found."))
+} else {
+  print(paste("No records for year",year))
+}
+```
+
+
+
+# Exercise: Loop and If Statements with `gapminder`
+
+Write a script that loops through the `gapminder` data by continent and prints out whether the mean life expectancy is smaller or larger than 50 years.
+
+Then, modify the script to loop over each country. This time print out whether the life expectancy is smaller than 50, between 50 and 70, or greater than 70.
+
+```{asis}
+### Answer
+```
+
+```{r}
+thresholdValue <- 50
+
+for(iContinent in unique(gapminder$continent)) {
+   tmp <- mean(gapminder$lifeExp[gapminder$continent==iContinent])
+   
+   if(tmp < thresholdValue) {
+       print(paste("Average Life Expectancy in", iContinent, "is less than", thresholdValue))
+   } else {
+       print(paste("Average Life Expectancy in", iContinent, "is greater than", thresholdValue))
+   } # end if else condition
+   
+} # end for loop
+```
+
+```{r, results='hide'}
+lowerThreshold <- 50
+upperThreshold <- 70
+ 
+for(iCountry in unique(gapminder$country)){
+    tmp <- mean(gapminder$lifeExp[gapminder$country==iCountry])
+    
+    if(tmp < lowerThreshold){
+        print(paste("Average Life Expectancy in", iCountry, "is less than", lowerThreshold))
+    }
+    else if(tmp > lowerThreshold & tmp < upperThreshold){
+        print(paste("Average Life Expectancy in", iCountry, "is between", lowerThreshold, "and", upperThreshold))
+    }
+    else{
+        print(paste("Average Life Expectancy in", iCountry, "is greater than", upperThreshold))
+    }
+   
+}
+```
+
+```{asis}
+Ouput for above not printed in the interest of space.
+```
+
+
+# Exercise: Loop with `mtcars`
+
+Loop through the observations in the built-in `mtcars` and print the name of the car (it's the rowname).  For each car, also print out whether it has a "manual" or "automatic" transmission.  
+
+Hint: Look at the help page for `mtcars` to see which column refers to transmission type and which value equals which type.
+
+```{r, echo=TRUE, eval=TRUE}
+data(mtcars) #load the data
+```
+
+
+```{asis}
+### Answer
+```
+
+```{r}
+for (i in 1:nrow(mtcars)) {
+  if (mtcars$am[i] == 0) {
+    transtype <- "automatic"
+  } else {
+    transtype <- "manual"
+  }
+  print(paste(rownames(mtcars)[i], transtype, sep=': '))
+}
+```
+
+```{asis}
+Remember that there are other ways to write the loop and conditional statements that are still valid.
+```
+
+
+# Exercise: ifelse
+
+Use the `ifelse` function to add a new column to `mtcars`, transmission_name, that contains "automatic" or "manual" as appropriate.
+
+
+```{asis}
+### Answer
+```
+
+```{r}
+mtcars$transmission_name <- ifelse(mtcars$am == 0, "automatic", "manual")
+```
+
+
+
+# Exercise: Write Functions
+
+Create a function that given a data frame will print the name of each column and the class of data it contains. An example test data frame is supplied below.  Hint: Use `mode()` to get the class of the data in each column.  
+
+```{r, eval=TRUE, echo=TRUE}
+testdf <- data.frame(val1=1:5, val2=c("A","B","C","D","E"), 
+                     stringsAsFactors = FALSE)
+```
+
+
+Create a function that given a vector and an integer will return how many times the integer appears in the vector.
+
+Create a function that given a vector will print the mean and the standard deviation, it will optionally also print the median.
+
+```{asis}
+### Answer
+
+Note: Some of these were taken or modified from https://www.r-bloggers.com/functions-exercises/
+```
+
+```{r}
+data_frame_info <- function(df) {
+  for (col in names(df)) {
+    print(paste0(col, ": ", mode(df[,col])))
+  }
+}
+data_frame_info(testdf)
+```
+
+
+```{r}
+appearances <- function(x, val) {
+  sum(x == val)
+}
+appearances(c(1,2,2,3,3,3,4), 4)
+```
+
+```{r}
+vector_info <- function(x, include_median=FALSE) {
+  print(paste("Mean:", mean(x)))
+  print(paste("Standard Deviation:", sd(x)))
+  if (include_median) {
+    print(paste("Median:", median(x)))
+  }
+}
+vector_info(c(1,2,2,3,3,3,4))
+vector_info(c(1,2,2,3,3,3,4), TRUE)
+```
+
+
+# Challenge Exercise: The Birthday Problem
+
+Say we choose 25 people at random. What is the probability two or more of them have the same birthday?
+
+Write R code to figure this out by sampling birthdays (instead of solving it theoretically).  Generalize your code to figure out how the probability changes as you increase the number of people in the room.  Compute for 5 people up to 50 people, at increments of 5.  If you know how to make a plot in R, plot the probability as a function of the number of people.
+
+Model simplifications:
+
+* Ignore leap years
+* Assume the probability of having a birthday in any of the 365 days of the year is equally likely (and no twins, triplets, etc. in the room).
+
+Hints:
+
+* You'll want to simulate rooms of 25 people multiple times, and use the results of multiple iterations to compute the probability.
+* Functions you may be interested in: `sample`, `replicate`
+* You don't need to use any actual date objects in this task.  
+
+Note: Learn more about the birthday problem [here](http://mathforum.org/dr.math/faq/faq.birthdayprob.html).
+
+
+```{asis}
+### Answer
+
+Let's start by thinking of one room. We need to sample 25 birthdays and check how many are repeated.  We can simulate this by sampling from a vector of values of 1 to 365, since that represents all possible birthdays.
+```
+
+```{r}
+set.seed(94705) # to ensure answer text below makes sense
+birthdays <- sample(1:365, 25, replace=TRUE)
+birthdays
+```
+
+```{asis}
+We now want to know how many of those birthdays are repeated. 
+```
+
+```{r}
+duplicated(birthdays)
+sum(duplicated(birthdays))
+```
+
+```{asis}
+One birthday is a duplicate. Two people have the same birthday!  
+
+Now we need to repeat this process many times, to see how frequently it happens.
+
+We start by writing the function; make the number of people an argument since we'll want to change it later:
+```
+
+```{r}
+birthday_function <- function(people=25){
+    
+    # we populate the room
+    birthdays <- sample(1:365, people, replace=TRUE)
+
+    # get the unique number of bdays
+    shared_bdays <- sum(duplicated(birthdays))
+
+    # return whether at least one bday is repeated.
+    return(shared_bdays>0)
+}
+set.seed(94705) # use same seed to make sure everything is working
+birthday_function(people=25)
+```
+
+```{asis}
+Thus, we have one repeat birthday! 
+
+Now we can use `replicate` to repeat the process 1,000 times:
+```
+
+```{r}
+many_sims <- replicate(1000, birthday_function()) # people defaults to 25
+```
+
+```{asis}
+To approximate the probability of at least one matching birthday, we can just take the mean of this vector (it's a vector of booleans, but `mean` will convert to numeric:
+```
+
+```{r}
+mean(many_sims)
+```
+
+```{asis}
+Now want to use R to see how this probability changes as the number of people in the room changes. How can we do this? We can use our function but incorporating it into a loop which varies the number of people in the room:
+```
+
+```{r}
+sims <- data.frame(numpeople=seq(5,50,5),
+                   prob=NA)
+
+for(i in 1:nrow(sims)){
+    many_sims <- replicate(1000, birthday_function(people=sims$numpeople[i]))
+    sims[i,"prob"] <- mean(many_sims)
+}
+
+sims
+```
+
+```{asis}
+Plot the probability: 
+```
+
+```{r}
+plot(sims$numpeople, sims$prob, 
+     pch=16, col="blue", type="b",# just nice settings
+     xlab="Number of People", 
+     ylab="Probability of at Least One Match",
+     main="Birthday Problem Results")
+```
+
+
+
+# Challenge Exercise: Write a Substitution Cipher
+
+Note: This challenge requires multiple functions/ideas not covered in the workshop.
+
+Write a function that encodes a string with a [substitution cipher](https://en.wikipedia.org/wiki/Substitution_cipher).  
+
+Do this by:
+
+* Generating a substitution cipher text randomly
+* Encoding the string
+* Returning both the cipher text and the encoded string
+
+Then also write a function that decodes from a supplied cipher text and an encoded string.
+
+Check your functions by making them call each other.
+
+Hint: You may want to convert all text to upper or lower case to keep everything consistent.  There's a `toupper` function.  What are you going to do with spaces and punctuation?
+
+Hint 2:  Look at the `sample` function to randomly generate a cipher.
+
+Hint 3: Use `match` to get the index position of a value in a vector.
+
+Hint 4: `strsplit` -- you can split on an empty string `''`
+
+
+```{asis}
+### Answer
+```
+
+
+```{r}
+encode <- function(input_text) {
+  cipher <- sample(LETTERS, 26)
+  std_input <- strsplit(toupper(input_text), '')[[1]]
+  result <- rep(NA, nchar(input_text))
+  for (i in 1:length(std_input)) {
+    if (std_input[i] %in% LETTERS) {
+      result[i] <- cipher[match(std_input[i], LETTERS)]
+    } else {
+      result[i] <- std_input[i]
+    }
+  }
+  return(list(cipher=paste(cipher, collapse=""), 
+              result=paste(result, collapse="")))
+}
+
+encoded_result <- encode("This is my secret text.")
+encoded_result
+
+decode <- function(encoded_text, cipher) {
+  std_cipher <- str_split(cipher, '')[[1]]
+  std_input <- strsplit(toupper(encoded_text), '')[[1]]
+  result <- rep(NA, nchar(encoded_text))
+  for (i in 1:length(std_input)) {
+    if (std_input[i] %in% std_cipher) {
+      result[i] <- LETTERS[match(std_input[i], std_cipher)]
+    } else {
+      result[i] <- std_input[i]
+    }
+  }
+  return(paste(result=paste(result, collapse="")))
+}
+
+decode(encoded_result$result, encoded_result$cipher)
+```
+
+
+

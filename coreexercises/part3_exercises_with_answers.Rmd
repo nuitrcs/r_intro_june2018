@@ -1,0 +1,123 @@
+---
+title: "Exercises Part 3: Reading and Writing Data Files"
+author: "Christina Maimone"
+date: "`r Sys.Date()`"
+output: html_document
+params:
+    answers: TRUE
+---
+
+```{r, echo=FALSE, eval=TRUE}
+answers<-params$answers
+```
+
+```{r global_options, echo = FALSE, include = FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning = FALSE, message = FALSE,
+                      cache = FALSE, tidy = FALSE, size = "small")
+#knitr::opts_knit$set(root.dir=)
+```
+
+
+# Exercise: Read Data
+
+Read in the data (a csv file) from https://goo.gl/dWrc9m to a data frame called `gapminder` (data is also in `data/gapminder5.csv` if you don't have an internet connection).  Do you need to make any adjustments to the defaults?  Note: you can specify a url instead of a filename/file path when using `read.csv`.
+
+Look at the type of each column in the data you read in.  
+
+View the observations for Belgium.
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=FALSE}
+gapminder<-read.csv("https://goo.gl/dWrc9m") ## defaults OK here
+str(gapminder)
+View(gapminder[gapminder$country=="Belgium",])
+```
+
+
+```{asis, echo=answers, eval=answers}
+Or, with `readr`:
+```
+
+
+```{r, echo=answers, eval=answers}
+library(readr)
+gapminder<-read_csv("https://goo.gl/dWrc9m")
+```
+
+# Exercise: Read Tab-delimited
+
+Read in the tab-delimited file (states.txt) at https://goo.gl/AwnS4R (data is also at `data/states.txt`).  What changes do you need to make to read in tab-delimited data?  Are any other adjustments to the defaults warranted?
+
+Change the column names to state, lat, and lon.  
+
+Does anything look strange to you about this data?
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+statedata<-read.csv("https://goo.gl/AwnS4R", sep='\t', col.names=c("state", "lat","lon"))
+dim(statedata)
+```
+
+```{asis, echo=answers, eval=answers}
+There are more than 50 observations.  Take a look at the data, and you'll see some unfamiliar codes.  These correspond to US territories.  It's always good to check to make sure your data looks like you expect.
+
+Above, with `readr`:
+```
+
+```{r, echo=answers, eval=answers}
+library(readr)
+statedata<-read_tsv("https://goo.gl/AwnS4R", col_names=c("state", "lat","lon"))
+```
+
+# Exercise: Write a data file
+
+You read in the state data above.  Now write it to file as a CSV file, with sensible options.
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=FALSE}
+# data read into a data frame called statedata above
+write.csv(statedata, "statedatacopy.csv", row.names=FALSE)
+```
+
+```{asis, echo=answers, eval=answers}
+Above, with `readr`:
+```
+
+```{r, echo=answers, eval=FALSE}
+library(readr)
+statedata<-write_csv(statedata, "statedatacopy.csv")
+```
+
+
+# Challenge Exercise: Reading Excel Files
+
+Create an Excel file.  Read it into Excel with the `readxl` package.  How would you read in the second sheet?
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{asis, echo=answers, eval=answers}
+Create your own file.  Let's pretend it's called `mydata.xlsx`.  Then
+```
+
+```{r, echo=answers, eval=FALSE}
+library(readxl)
+mydata <- read_excel("mydata.xlsx")
+```
+
+```{asis, echo=answers, eval=answers}
+To read in the second sheet, use the `sheet` argument to `read_excel`.
+```
+
+
+

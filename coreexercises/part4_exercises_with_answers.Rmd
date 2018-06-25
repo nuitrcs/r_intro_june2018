@@ -1,0 +1,217 @@
+---
+title: "Exercises Part 4: Data Manipulation and Basic Exploration"
+author: "Christina Maimone"
+date: "`r Sys.Date()`"
+output: html_document
+params:
+    answers: TRUE
+---
+
+```{r, echo=FALSE, eval=TRUE}
+answers<-params$answers
+```
+
+```{r global_options, echo = FALSE, include = FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning = FALSE, message = FALSE,
+                      cache = FALSE, tidy = FALSE, size = "small")
+#knitr::opts_knit$set(root.dir=)
+```
+
+# Setup
+
+These exercises use the `gapminder` data you may have read in during previous exercises.  If not, you can read in the file, or you could get the data from a package.
+
+### Option 1: Read data file
+
+```{r, eval=FALSE}
+gapminder<-read_csv("https://goo.gl/dWrc9m")
+# or
+gapminder <- read_csv("data/gapminder5.csv")
+```
+
+### Option 2: Install and Use Package
+
+```{r, eval=FALSE}
+install.packages("gapminder")
+```
+
+```{r, warning=FALSE, error=FALSE}
+library(gapminder)
+```
+
+The object we want from this package is `gapminder`.  The `gapminder` data frame is available for you to use, but it can help to explicitly load it into the workspace:
+
+```{r}
+data(gapminder)
+```
+
+Now `gapminder` should show up in the Environment tab in the upper right of RStudio.  See the help for `gapminder` for a description of the data.
+
+
+### Hint
+
+If, while you're doing any of these exercises, you mess your data frame, you can always reload the data and try again.  That's part of the reason why you always want to have a complete script of what you do to your data -- so you can re-run it all when you make a mistake.
+
+### Note
+
+Also note that many of these exercises are a significant step up in difficulty from previous parts.  Many require multiple steps or lines of code to complete.  Think through the steps you want to take, then try to figure out how to do each step in R.
+ 
+---
+
+# Exercise: Explore the Structure of the Dataset
+
+* What are the names of the columns?
+* Is there any missing data?
+* How many different countries are there?
+* What is the continent name for the US?
+* Does the number of countries in the data change over time?  
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+names(gapminder)
+sum(is.na(gapminder)) # count any missing values in entire data set
+length(unique(gapminder$country)) # number of countries
+length(levels(gapminder$country)) # alt. to get num countries, since it's a factor
+```
+
+```{asis, echo=answers, eval=answers}
+You could also look in the Environment tab in the upper right window in RStudio to see the number of levels for country.
+
+To find the continent for the US, we need to see how the US appears in the data.  Easiest option is probably just to print the names of all of the countries and look at them, since there aren't that many.  
+```
+
+```{r, echo=answers, eval=answers}
+# continent for US
+gapminder$continent[gapminder$country=="United States"][1] ## [1] because we just need 1 value
+
+# number of countries per year
+tapply(gapminder$country, gapminder$year, length)
+```
+
+
+# Exercise: Selecting and Filtering
+
+* Show observations where life expectancy is greater than 80.
+* Show only population and GDP per capita for Kenya for years before 1970.
+* Show the observation that has the maximum life expectancy
+
+Note: for cases where a tibble is the output, it's ok if just the first rows show.
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+gapminder[gapminder$lifeExp > 80,]
+gapminder[gapminder$country=='Kenya' & gapminder$year < 1970, 
+          c("pop", "gdpPercap")]
+gapminder[gapminder$lifeExp == max(gapminder$lifeExp),]
+```
+
+
+
+# Exercise: Transforming Data
+
+* Add a new column to `gapminder` that is the population in millions.
+* Instead of having North and South American countries together as a continent, reassign the North American countries in the vector below to have contient "North America" and the rest of the countries currently associated with "America" to be "South America".  Hint: continent is a factor, so you'll need to either first convert it to character data or explicitly manipulate the levels.  
+* Make a new object, `gapminder_max` that has only one observation per country, and has the maximum value that each country has had overtime for population, life expectancy, and GDP per capita.  Hint: use `aggregate` and note that the first argument (the data) needs to only contain the columns you want to compute a summary measure on.  
+
+```{r}
+# not all of them, but these are the ones in gapminder
+northamerica <- c("Canada", "Costa Rica", "Cuba", "Dominican Republic", 
+                "El Salvador", "Guatemala", "Haiti", "Honduras",
+                "Jamaica", "Mexico", "Nicaragua", "Panama",
+                "Trinidad and Tobago", "United States")
+```
+
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+gapminder$popmillion <- gapminder$pop/1000000
+
+gapminder$continent <- as.character(gapminder$continent)
+gapminder$continent[gapminder$country %in% northamerica] <-
+  "North America"
+gapminder$continent[gapminder$continent == "Americas"] <-
+  "South America"
+gapminder$continent <- factor(gapminder$continent)
+
+gapminder_max <- aggregate(gapminder[,c("pop","lifeExp","gdpPercap")], 
+                           by=list(country=gapminder$country, 
+                                   continent=gapminder$continent), # to keep continent in the data
+                           max)
+```
+
+
+
+# Exercise: Grouping and Summarizing
+
+Calculate the average life expectancy per country. Which had the longest life expectancy and which had the shortest life expectancy?
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, eval=answers, echo=answers}
+# aggregate will keep country name, whereas tapply wouldn't
+meanLifeExp <- aggregate(gapminder$lifeExp, 
+                         list(country=gapminder$country), 
+                         mean)
+names(meanLifeExp)
+meanLifeExp[meanLifeExp$x == max(meanLifeExp$x),]
+meanLifeExp[meanLifeExp$x == min(meanLifeExp$x),]
+# or, with special functions
+meanLifeExp[which.max(meanLifeExp$x),]
+meanLifeExp[which.min(meanLifeExp$x),]
+```
+
+
+
+# Challenge Exercise: Complex Group Summary
+
+Find all countries where life expectancy increased by at least 60% from 1952 to 2007.
+
+Hint: you might find the `merge` function useful.
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+# one way, there are others
+y1952<-gapminder[gapminder$year==1952, c("country","lifeExp")]
+y2007<-gapminder[gapminder$year==2007, c("country","lifeExp")]
+bothyears<-merge(y1952, y2007, by="country")
+bothyears$pctIncrease <- (bothyears$lifeExp.y - bothyears$lifeExp.x)/bothyears$lifeExp.x
+bothyears[bothyears$pctIncrease >= .6,]
+```
+
+
+# Challenge Exercise: Drops in Population
+
+Find all countries that experienced a drop in population at any point in the timespan of the data.
+
+Hint: look at the `diff` function.  Note that `diff` will result in one fewer values in the result than in the original, so you'll need to address that.
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+gapminder <- gapminder[order(gapminder$country, gapminder$year),] # make sure in order for diffs
+gapminder$popdiff <- c(NA, diff(gapminder$pop, lag=1))
+# We lagged across countries: get rid of first (1952) observation for each country, 
+# which doesn't have anything previous to compare to
+gapminder$popdiff[gapminder$year == 1952] <- NA
+gapminder[!is.na(gapminder$popdiff) & gapminder$popdiff < 0,] 
+```
+
+
+**Note: More exercises coming soon.**
+
