@@ -32,8 +32,8 @@ You can use this space like you would your RStudio on own computer, except you c
 The main materials are slides.  Keynote and Powerpoint versions are available:
 
 * [Online version](https://nuitrcs.github.io/r_intro_june2018/slides/)
-* [Keynote Slides](https://nuitrcs.github.io/r_intro_june2018/slides.key)
-* [Powerpoint Slides](https://nuitrcs.github.io/r_intro_june2018/slides.pptx)
+* [Keynote Slides](https://github.com/nuitrcs/r_intro_june2018/blob/master/slides.key?raw=true)
+* [Powerpoint Slides](https://github.com/nuitrcs/r_intro_june2018/blob/master/slides.pptx?raw=true)
 
 
 Exercises we do during the workshop are either in the slides or in .R files in the [exercises directory](/exercises).
