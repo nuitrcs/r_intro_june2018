@@ -2,8 +2,6 @@
 
 [Research Computing Services](http://www.it.northwestern.edu/research/).  
 
-*Workshop materials still in development.*
-
 # Software and Files
 
 ## R and RStudio
@@ -33,9 +31,10 @@ You can use this space like you would your RStudio on own computer, except you c
 
 The main materials are slides.  Keynote and Powerpoint versions are available:
 
-* Keynote Slides
-* Powerpoint Slides
-* Online version
+* [Online version](https://nuitrcs.github.io/r_intro_june2018/slides/)
+* [Keynote Slides](https://nuitrcs.github.io/r_intro_june2018/slides.key)
+* [Powerpoint Slides](https://nuitrcs.github.io/r_intro_june2018/slides.pptx)
+
 
 Exercises we do during the workshop are either in the slides or in .R files in the [exercises directory](/exercises).
 
