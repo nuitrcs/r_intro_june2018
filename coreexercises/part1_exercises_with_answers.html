@@ -189,11 +189,11 @@ x[!x %in% badvals]</code></pre>
 <pre class="r"><code>'c' %in% random_letters # test for inclusion</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code>which(random_letters == 'c') # get actual position</code></pre>
-<pre><code>## [1] 9</code></pre>
+<pre><code>## [1]  8 27 44</code></pre>
 <pre class="r"><code>sort(table(random_letters))</code></pre>
 <pre><code>## random_letters
-## c k l q s i j p r v w z a d e f g x b o h 
-## 1 1 1 1 1 2 2 2 2 2 2 2 3 3 3 3 3 3 4 4 5</code></pre>
+## b o r t w x a f l m n p q s y c e h k u v g j 
+## 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 4 4</code></pre>
 <p><code>which</code> gets you all positions in the vector. <code>match</code> would only give you the index of the first match</p>
 <pre class="r"><code># save the table results
 table_results &lt;- sort(table(random_letters), decreasing=TRUE)
@@ -205,9 +205,9 @@ freq_letter &lt;- names(table_results)[1]
 random_letters[random_letters == freq_letter] &lt;- '*'
 
 random_letters</code></pre>
-<pre><code>##  [1] &quot;v&quot; &quot;*&quot; &quot;x&quot; &quot;e&quot; &quot;a&quot; &quot;e&quot; &quot;g&quot; &quot;r&quot; &quot;c&quot; &quot;*&quot; &quot;f&quot; &quot;f&quot; &quot;p&quot; &quot;a&quot; &quot;x&quot; &quot;l&quot; &quot;e&quot;
-## [18] &quot;q&quot; &quot;i&quot; &quot;g&quot; &quot;w&quot; &quot;z&quot; &quot;a&quot; &quot;*&quot; &quot;*&quot; &quot;g&quot; &quot;w&quot; &quot;b&quot; &quot;b&quot; &quot;s&quot; &quot;o&quot; &quot;b&quot; &quot;d&quot; &quot;k&quot;
-## [35] &quot;o&quot; &quot;x&quot; &quot;p&quot; &quot;r&quot; &quot;*&quot; &quot;j&quot; &quot;z&quot; &quot;d&quot; &quot;f&quot; &quot;b&quot; &quot;i&quot; &quot;v&quot; &quot;j&quot; &quot;o&quot; &quot;o&quot; &quot;d&quot;</code></pre>
+<pre><code>##  [1] &quot;f&quot; &quot;h&quot; &quot;h&quot; &quot;q&quot; &quot;l&quot; &quot;q&quot; &quot;o&quot; &quot;c&quot; &quot;p&quot; &quot;j&quot; &quot;l&quot; &quot;b&quot; &quot;*&quot; &quot;k&quot; &quot;v&quot; &quot;w&quot; &quot;p&quot;
+## [18] &quot;u&quot; &quot;j&quot; &quot;k&quot; &quot;s&quot; &quot;v&quot; &quot;*&quot; &quot;u&quot; &quot;j&quot; &quot;n&quot; &quot;c&quot; &quot;e&quot; &quot;x&quot; &quot;k&quot; &quot;t&quot; &quot;v&quot; &quot;y&quot; &quot;r&quot;
+## [35] &quot;n&quot; &quot;h&quot; &quot;f&quot; &quot;a&quot; &quot;s&quot; &quot;*&quot; &quot;e&quot; &quot;a&quot; &quot;m&quot; &quot;c&quot; &quot;u&quot; &quot;j&quot; &quot;y&quot; &quot;*&quot; &quot;m&quot; &quot;e&quot;</code></pre>
 <p>If you searched the internet for an answer, you may have been able to come up with other solutions.</p>
 </div>
 </div>
@@ -281,10 +281,18 @@ ls() #list all objects, check by looking</code></pre>
 <pre class="r"><code>library(fortunes) # don't forget to load it!
 fortune()</code></pre>
 <pre><code>## 
-## Please do think hard before you tell other people what they 'should' do
-## for you.
-##    -- Brian D. Ripley
-##       R-devel (January 2006)</code></pre>
+## Many problems come as a result of users forgetting that they are smarter
+## than the computer. I see 3 ways to remedy the problem:
+## 1. Make computers that are as smart or smarter than people.
+## 2. Make the programmers anticipate every way that someone may use a
+## particular function and make them implement all of the functionality even
+## if they don't think it is worth the time/effort since there is an easy
+## work around for many of the less likely used features.
+## 3. Don't expect the computer to guess correctly and tell it exactly what
+## you want it to do.
+##    -- Greg Snow (in response to the question why as.Date() would not parse
+##       &quot;13/1/2001&quot; in 'the only reasonable way')
+##       R-help (January 2009)</code></pre>
 </div>
 </div>
 <div id="challenge-exercise-working-with-strings" class="section level1">
@@ -355,12 +363,12 @@ months&lt;-factor(months)
 table(months) # months should be alphabetical</code></pre>
 <pre><code>## months
 ## Apr Aug Dec Feb Jan Jul Jun Mar May Nov Oct Sep 
-##   4   4   3   2   3   2   5   5   4   2   3   3</code></pre>
+##   4   2   2   1   3   2   2   4   5   7   3   5</code></pre>
 <pre class="r"><code>months&lt;-factor(months, levels=month.abb, ordered=TRUE)
 table(months) # months should be in order</code></pre>
 <pre><code>## months
 ## Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 
-##   3   2   5   4   4   5   2   4   3   3   2   3</code></pre>
+##   3   1   4   4   5   2   2   2   5   3   7   2</code></pre>
 </div>
 </div>
 <div id="challenge-exercise-dates" class="section level1">

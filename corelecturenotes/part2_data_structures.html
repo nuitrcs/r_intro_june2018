@@ -351,33 +351,33 @@ color</code></pre>
 ## [17] &quot;blue&quot;  &quot;blue&quot;  &quot;blue&quot;  &quot;blue&quot;</code></pre>
 <pre class="r"><code>score&lt;-runif(20)
 score</code></pre>
-<pre><code>##  [1] 0.56535842 0.84996161 0.50103250 0.73152118 0.86392931 0.19629485
-##  [7] 0.79999860 0.85645126 0.45620844 0.76714639 0.46085616 0.74622475
-## [13] 0.07934098 0.35145056 0.48285685 0.80119344 0.22220140 0.54442650
-## [19] 0.41627939 0.47298426</code></pre>
+<pre><code>##  [1] 0.223142107 0.343540437 0.290103728 0.001125297 0.014567217
+##  [6] 0.935936335 0.008040724 0.472262809 0.251388052 0.978028771
+## [11] 0.586761842 0.477580148 0.986796421 0.311279278 0.427817430
+## [16] 0.931518035 0.740576262 0.759508599 0.768529458 0.547560414</code></pre>
 <pre class="r"><code>df&lt;-data.frame(id, color, score)
 df</code></pre>
-<pre><code>##    id color      score
-## 1   1   red 0.56535842
-## 2   2   red 0.84996161
-## 3   3   red 0.50103250
-## 4   4 green 0.73152118
-## 5   5 green 0.86392931
-## 6   6 green 0.19629485
-## 7   7 green 0.79999860
-## 8   8 green 0.85645126
-## 9   9 green 0.45620844
-## 10 10 green 0.76714639
-## 11 11 green 0.46085616
-## 12 12 green 0.74622475
-## 13 13 green 0.07934098
-## 14 14  blue 0.35145056
-## 15 15  blue 0.48285685
-## 16 16  blue 0.80119344
-## 17 17  blue 0.22220140
-## 18 18  blue 0.54442650
-## 19 19  blue 0.41627939
-## 20 20  blue 0.47298426</code></pre>
+<pre><code>##    id color       score
+## 1   1   red 0.223142107
+## 2   2   red 0.343540437
+## 3   3   red 0.290103728
+## 4   4 green 0.001125297
+## 5   5 green 0.014567217
+## 6   6 green 0.935936335
+## 7   7 green 0.008040724
+## 8   8 green 0.472262809
+## 9   9 green 0.251388052
+## 10 10 green 0.978028771
+## 11 11 green 0.586761842
+## 12 12 green 0.477580148
+## 13 13 green 0.986796421
+## 14 14  blue 0.311279278
+## 15 15  blue 0.427817430
+## 16 16  blue 0.931518035
+## 17 17  blue 0.740576262
+## 18 18  blue 0.759508599
+## 19 19  blue 0.768529458
+## 20 20  blue 0.547560414</code></pre>
 <p>Instead of making individual objects first, we could do it all together:</p>
 <pre class="r"><code>df&lt;-data.frame(id=1:20, 
                color=c(rep(&quot;red&quot;, 3), rep(&quot;green&quot;,10), rep(&quot;blue&quot;, 7)),
@@ -388,47 +388,47 @@ df</code></pre>
 ## Levels: blue green red</code></pre>
 <pre class="r"><code>df[1,]</code></pre>
 <pre><code>##   id color     score
-## 1  1   red 0.5609801</code></pre>
+## 1  1   red 0.6767459</code></pre>
 <pre class="r"><code>df[,3]</code></pre>
-<pre><code>##  [1] 0.560980110 0.931505553 0.257928148 0.775541977 0.029940984
-##  [6] 0.002026272 0.647160394 0.334856310 0.360211738 0.068453772
-## [11] 0.156620448 0.721999480 0.100057796 0.329027714 0.940167947
-## [16] 0.816286859 0.669000064 0.680046326 0.537618218 0.508792105</code></pre>
+<pre><code>##  [1] 0.67674595 0.09959015 0.29494476 0.71348489 0.72040221 0.37620286
+##  [7] 0.35561712 0.85804955 0.27925914 0.15645702 0.17497772 0.84966115
+## [13] 0.19067975 0.11188018 0.18717916 0.65796111 0.57171289 0.83195497
+## [19] 0.61923506 0.69552214</code></pre>
 <p>You can use negative values when indexing to exclude values:</p>
 <pre class="r"><code>df[,-2]</code></pre>
-<pre><code>##    id       score
-## 1   1 0.560980110
-## 2   2 0.931505553
-## 3   3 0.257928148
-## 4   4 0.775541977
-## 5   5 0.029940984
-## 6   6 0.002026272
-## 7   7 0.647160394
-## 8   8 0.334856310
-## 9   9 0.360211738
-## 10 10 0.068453772
-## 11 11 0.156620448
-## 12 12 0.721999480
-## 13 13 0.100057796
-## 14 14 0.329027714
-## 15 15 0.940167947
-## 16 16 0.816286859
-## 17 17 0.669000064
-## 18 18 0.680046326
-## 19 19 0.537618218
-## 20 20 0.508792105</code></pre>
+<pre><code>##    id      score
+## 1   1 0.67674595
+## 2   2 0.09959015
+## 3   3 0.29494476
+## 4   4 0.71348489
+## 5   5 0.72040221
+## 6   6 0.37620286
+## 7   7 0.35561712
+## 8   8 0.85804955
+## 9   9 0.27925914
+## 10 10 0.15645702
+## 11 11 0.17497772
+## 12 12 0.84966115
+## 13 13 0.19067975
+## 14 14 0.11188018
+## 15 15 0.18717916
+## 16 16 0.65796111
+## 17 17 0.57171289
+## 18 18 0.83195497
+## 19 19 0.61923506
+## 20 20 0.69552214</code></pre>
 <pre class="r"><code>df[-1:-10,]</code></pre>
 <pre><code>##    id color     score
-## 11 11 green 0.1566204
-## 12 12 green 0.7219995
-## 13 13 green 0.1000578
-## 14 14  blue 0.3290277
-## 15 15  blue 0.9401679
-## 16 16  blue 0.8162869
-## 17 17  blue 0.6690001
-## 18 18  blue 0.6800463
-## 19 19  blue 0.5376182
-## 20 20  blue 0.5087921</code></pre>
+## 11 11 green 0.1749777
+## 12 12 green 0.8496612
+## 13 13 green 0.1906798
+## 14 14  blue 0.1118802
+## 15 15  blue 0.1871792
+## 16 16  blue 0.6579611
+## 17 17  blue 0.5717129
+## 18 18  blue 0.8319550
+## 19 19  blue 0.6192351
+## 20 20  blue 0.6955221</code></pre>
 <p>You can also use the names of the columns after a <code>$</code> or in the indexing:</p>
 <pre class="r"><code>df$color</code></pre>
 <pre><code>##  [1] red   red   red   green green green green green green green green
@@ -458,61 +458,59 @@ df</code></pre>
 ## 19  blue
 ## 20  blue</code></pre>
 <pre class="r"><code>df[2:3]</code></pre>
-<pre><code>##    color       score
-## 1    red 0.560980110
-## 2    red 0.931505553
-## 3    red 0.257928148
-## 4  green 0.775541977
-## 5  green 0.029940984
-## 6  green 0.002026272
-## 7  green 0.647160394
-## 8  green 0.334856310
-## 9  green 0.360211738
-## 10 green 0.068453772
-## 11 green 0.156620448
-## 12 green 0.721999480
-## 13 green 0.100057796
-## 14  blue 0.329027714
-## 15  blue 0.940167947
-## 16  blue 0.816286859
-## 17  blue 0.669000064
-## 18  blue 0.680046326
-## 19  blue 0.537618218
-## 20  blue 0.508792105</code></pre>
+<pre><code>##    color      score
+## 1    red 0.67674595
+## 2    red 0.09959015
+## 3    red 0.29494476
+## 4  green 0.71348489
+## 5  green 0.72040221
+## 6  green 0.37620286
+## 7  green 0.35561712
+## 8  green 0.85804955
+## 9  green 0.27925914
+## 10 green 0.15645702
+## 11 green 0.17497772
+## 12 green 0.84966115
+## 13 green 0.19067975
+## 14  blue 0.11188018
+## 15  blue 0.18717916
+## 16  blue 0.65796111
+## 17  blue 0.57171289
+## 18  blue 0.83195497
+## 19  blue 0.61923506
+## 20  blue 0.69552214</code></pre>
 <p>Instead of index numbers or names, you can also select values by using logical statements. This is usually done with selecting rows.</p>
 <pre class="r"><code>df[df$color == &quot;green&quot;,]</code></pre>
-<pre><code>##    id color       score
-## 4   4 green 0.775541977
-## 5   5 green 0.029940984
-## 6   6 green 0.002026272
-## 7   7 green 0.647160394
-## 8   8 green 0.334856310
-## 9   9 green 0.360211738
-## 10 10 green 0.068453772
-## 11 11 green 0.156620448
-## 12 12 green 0.721999480
-## 13 13 green 0.100057796</code></pre>
+<pre><code>##    id color     score
+## 4   4 green 0.7134849
+## 5   5 green 0.7204022
+## 6   6 green 0.3762029
+## 7   7 green 0.3556171
+## 8   8 green 0.8580495
+## 9   9 green 0.2792591
+## 10 10 green 0.1564570
+## 11 11 green 0.1749777
+## 12 12 green 0.8496612
+## 13 13 green 0.1906798</code></pre>
 <pre class="r"><code>df[df$score &gt; .5,]</code></pre>
 <pre><code>##    id color     score
-## 1   1   red 0.5609801
-## 2   2   red 0.9315056
-## 4   4 green 0.7755420
-## 7   7 green 0.6471604
-## 12 12 green 0.7219995
-## 15 15  blue 0.9401679
-## 16 16  blue 0.8162869
-## 17 17  blue 0.6690001
-## 18 18  blue 0.6800463
-## 19 19  blue 0.5376182
-## 20 20  blue 0.5087921</code></pre>
+## 1   1   red 0.6767459
+## 4   4 green 0.7134849
+## 5   5 green 0.7204022
+## 8   8 green 0.8580495
+## 12 12 green 0.8496612
+## 16 16  blue 0.6579611
+## 17 17  blue 0.5717129
+## 18 18  blue 0.8319550
+## 19 19  blue 0.6192351
+## 20 20  blue 0.6955221</code></pre>
 <pre class="r"><code>df[df$score &gt; .5 &amp; df$color == &quot;blue&quot;,]</code></pre>
 <pre><code>##    id color     score
-## 15 15  blue 0.9401679
-## 16 16  blue 0.8162869
-## 17 17  blue 0.6690001
-## 18 18  blue 0.6800463
-## 19 19  blue 0.5376182
-## 20 20  blue 0.5087921</code></pre>
+## 16 16  blue 0.6579611
+## 17 17  blue 0.5717129
+## 18 18  blue 0.8319550
+## 19 19  blue 0.6192351
+## 20 20  blue 0.6955221</code></pre>
 <p>You can assign names to the rows of a data frame as well as to the columns, and then use those names for indexing and selecting data.</p>
 <pre class="r"><code>rownames(df)</code></pre>
 <pre><code>##  [1] &quot;1&quot;  &quot;2&quot;  &quot;3&quot;  &quot;4&quot;  &quot;5&quot;  &quot;6&quot;  &quot;7&quot;  &quot;8&quot;  &quot;9&quot;  &quot;10&quot; &quot;11&quot; &quot;12&quot; &quot;13&quot; &quot;14&quot;
@@ -520,27 +518,27 @@ df</code></pre>
 <p>You can add columns or rows simply by assigning values to them. There are also <code>rbind</code> and <code>cbind</code> (for row bind and column bind) functions that can be useful.</p>
 <pre class="r"><code>df$year&lt;-1901:1920
 df</code></pre>
-<pre><code>##    id color       score year
-## 1   1   red 0.560980110 1901
-## 2   2   red 0.931505553 1902
-## 3   3   red 0.257928148 1903
-## 4   4 green 0.775541977 1904
-## 5   5 green 0.029940984 1905
-## 6   6 green 0.002026272 1906
-## 7   7 green 0.647160394 1907
-## 8   8 green 0.334856310 1908
-## 9   9 green 0.360211738 1909
-## 10 10 green 0.068453772 1910
-## 11 11 green 0.156620448 1911
-## 12 12 green 0.721999480 1912
-## 13 13 green 0.100057796 1913
-## 14 14  blue 0.329027714 1914
-## 15 15  blue 0.940167947 1915
-## 16 16  blue 0.816286859 1916
-## 17 17  blue 0.669000064 1917
-## 18 18  blue 0.680046326 1918
-## 19 19  blue 0.537618218 1919
-## 20 20  blue 0.508792105 1920</code></pre>
+<pre><code>##    id color      score year
+## 1   1   red 0.67674595 1901
+## 2   2   red 0.09959015 1902
+## 3   3   red 0.29494476 1903
+## 4   4 green 0.71348489 1904
+## 5   5 green 0.72040221 1905
+## 6   6 green 0.37620286 1906
+## 7   7 green 0.35561712 1907
+## 8   8 green 0.85804955 1908
+## 9   9 green 0.27925914 1909
+## 10 10 green 0.15645702 1910
+## 11 11 green 0.17497772 1911
+## 12 12 green 0.84966115 1912
+## 13 13 green 0.19067975 1913
+## 14 14  blue 0.11188018 1914
+## 15 15  blue 0.18717916 1915
+## 16 16  blue 0.65796111 1916
+## 17 17  blue 0.57171289 1917
+## 18 18  blue 0.83195497 1918
+## 19 19  blue 0.61923506 1919
+## 20 20  blue 0.69552214 1920</code></pre>
 <pre class="r"><code>df[22,]&lt;-list(21, &quot;green&quot;, 0.4, 1921)</code></pre>
 <p>Note that we had to use a list for adding a row because there are different types.</p>
 </div>
@@ -549,13 +547,13 @@ df</code></pre>
 <p>You can use the <code>View</code> function to open a spreadsheet-style view of a matrix or data frame. Use the <code>View</code> function, or double-click on the name of the object in the Environment tab in the upper right window in RStudio.</p>
 <p>You can also use the <code>head</code> function to see the first 6 (by default) rows of a matrix or data frame:</p>
 <pre class="r"><code>head(df)</code></pre>
-<pre><code>##   id color       score year
-## 1  1   red 0.560980110 1901
-## 2  2   red 0.931505553 1902
-## 3  3   red 0.257928148 1903
-## 4  4 green 0.775541977 1904
-## 5  5 green 0.029940984 1905
-## 6  6 green 0.002026272 1906</code></pre>
+<pre><code>##   id color      score year
+## 1  1   red 0.67674595 1901
+## 2  2   red 0.09959015 1902
+## 3  3   red 0.29494476 1903
+## 4  4 green 0.71348489 1904
+## 5  5 green 0.72040221 1905
+## 6  6 green 0.37620286 1906</code></pre>
 <p>You can get dimensions with:</p>
 <pre class="r"><code>dim(y)</code></pre>
 <pre><code>## [1] 5 5</code></pre>
@@ -582,43 +580,43 @@ df</code></pre>
 <p>The most noticeable difference from a data frame is how they print to the console:</p>
 <pre class="r"><code>library(tibble)</code></pre>
 <pre class="r"><code>df</code></pre>
-<pre><code>##    id color       score year
-## 1   1   red 0.560980110 1901
-## 2   2   red 0.931505553 1902
-## 3   3   red 0.257928148 1903
-## 4   4 green 0.775541977 1904
-## 5   5 green 0.029940984 1905
-## 6   6 green 0.002026272 1906
-## 7   7 green 0.647160394 1907
-## 8   8 green 0.334856310 1908
-## 9   9 green 0.360211738 1909
-## 10 10 green 0.068453772 1910
-## 11 11 green 0.156620448 1911
-## 12 12 green 0.721999480 1912
-## 13 13 green 0.100057796 1913
-## 14 14  blue 0.329027714 1914
-## 15 15  blue 0.940167947 1915
-## 16 16  blue 0.816286859 1916
-## 17 17  blue 0.669000064 1917
-## 18 18  blue 0.680046326 1918
-## 19 19  blue 0.537618218 1919
-## 20 20  blue 0.508792105 1920
-## 21 NA  &lt;NA&gt;          NA   NA
-## 22 21 green 0.400000000 1921</code></pre>
+<pre><code>##    id color      score year
+## 1   1   red 0.67674595 1901
+## 2   2   red 0.09959015 1902
+## 3   3   red 0.29494476 1903
+## 4   4 green 0.71348489 1904
+## 5   5 green 0.72040221 1905
+## 6   6 green 0.37620286 1906
+## 7   7 green 0.35561712 1907
+## 8   8 green 0.85804955 1908
+## 9   9 green 0.27925914 1909
+## 10 10 green 0.15645702 1910
+## 11 11 green 0.17497772 1911
+## 12 12 green 0.84966115 1912
+## 13 13 green 0.19067975 1913
+## 14 14  blue 0.11188018 1914
+## 15 15  blue 0.18717916 1915
+## 16 16  blue 0.65796111 1916
+## 17 17  blue 0.57171289 1917
+## 18 18  blue 0.83195497 1918
+## 19 19  blue 0.61923506 1919
+## 20 20  blue 0.69552214 1920
+## 21 NA  &lt;NA&gt;         NA   NA
+## 22 21 green 0.40000000 1921</code></pre>
 <pre class="r"><code>as.tibble(df)</code></pre>
 <pre><code>## # A tibble: 22 x 4
-##       id color   score  year
-##  * &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;dbl&gt;
-##  1     1 red   0.561    1901
-##  2     2 red   0.932    1902
-##  3     3 red   0.258    1903
-##  4     4 green 0.776    1904
-##  5     5 green 0.0299   1905
-##  6     6 green 0.00203  1906
-##  7     7 green 0.647    1907
-##  8     8 green 0.335    1908
-##  9     9 green 0.360    1909
-## 10    10 green 0.0685   1910
+##       id color  score  year
+##  * &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1     1 red   0.677   1901
+##  2     2 red   0.0996  1902
+##  3     3 red   0.295   1903
+##  4     4 green 0.713   1904
+##  5     5 green 0.720   1905
+##  6     6 green 0.376   1906
+##  7     7 green 0.356   1907
+##  8     8 green 0.858   1908
+##  9     9 green 0.279   1909
+## 10    10 green 0.156   1910
 ## # ... with 12 more rows</code></pre>
 <p>But note also the difference with <code>[]</code>. Subsetting a <code>tibble</code> always gives you a <code>tibble</code>, but you can still get individual columns with <code>$</code>.</p>
 <pre class="r"><code>df[,1]</code></pre>
@@ -652,6 +650,15 @@ df</code></pre>
 <p><code>data.table</code> is another alternative to standard data frames that focuses on performance (speed and memory use). It overwrites the subsetting syntax to allow additional functionality for grouping, slicing, and summarizing data. It’s best not to mix <code>data.table</code> with the tidyverse, as they both redefine some of the same functions.</p>
 <pre class="r"><code>install.packages(&quot;data.table&quot;)</code></pre>
 <pre class="r"><code>library(data.table)</code></pre>
+<pre><code>## data.table 1.11.4  Latest news: http://r-datatable.com</code></pre>
+<pre><code>## 
+## Attaching package: 'data.table'</code></pre>
+<pre><code>## The following objects are masked from 'package:dplyr':
+## 
+##     between, first, last</code></pre>
+<pre><code>## The following object is masked from 'package:purrr':
+## 
+##     transpose</code></pre>
 <pre class="r"><code>mtcars_dt &lt;- as.data.table(mtcars) # mtcars is built-in data
 mtcars_dt[mpg &gt; 20,]  # conditionals without data.table name as a prefix</code></pre>
 <pre><code>##      mpg cyl  disp  hp drat    wt  qsec vs am gear carb

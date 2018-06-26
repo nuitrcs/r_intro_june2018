@@ -75,10 +75,10 @@ A point of caution.  As in other programs, numbers have finite precision:
 1/49 * 49 == 1
 ```
 
-You can use `near()` to check if numbers are equal within a small tolerance:
+You can use `dplyr::near()` to check if numbers are equal within a small tolerance:
 
 ```{r}
-near(1 / 49 * 49, 1)
+dplyr::near(1 / 49 * 49, 1)
 ```
 
 

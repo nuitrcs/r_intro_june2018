@@ -33,12 +33,11 @@ The main materials are slides.  Keynote and Powerpoint versions are available:
 
 * Keynote Slides
 * Powerpoint Slides
+* Online version
 
 Exercises we do during the workshop are either in the slides or in .R files in the [exercises directory](/exercises).
 
-Reference materials and independent practice exercises are written in RMarkdown (*.Rmd).  You can open these files directly in RStudio and run the code chunks.
-
-The RMarkdown files have also been converted to html files for easy viewing.  Exercise files have one RMarkdown file (with answers) and two html files (one with and one without answers).  Links to the html files are in the [coreexercises directory](/coreexercises).
+Reference materials and independent practice exercises are written in RMarkdown (*.Rmd).  You can open these files directly in RStudio and run the code chunks.  The RMarkdown files have also been converted to html files for easy viewing.  Exercise files have one RMarkdown file (with answers) and two html files (one with and one without answers).  Links to the html files are in the [coreexercises directory](/coreexercises).
 
 ### Opening/Downloading Files
 

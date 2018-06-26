@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo=TRUE, warning = FALSE, message = FALSE,
 #knitr::opts_knit$set(root.dir=)
 ```
 
+**Note: More exercises coming soon.**
+
 # Setup
 
 These exercises use the `gapminder` data you may have read in during previous exercises.  If not, you can read in the file, or you could get the data from a package.
@@ -213,5 +215,5 @@ gapminder[!is.na(gapminder$popdiff) & gapminder$popdiff < 0,]
 ```
 
 
-**Note: More exercises coming soon.**
+
 

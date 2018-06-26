@@ -22,4 +22,254 @@ notes<-params$notes
 
 
 
-New materials coming soon.
+# Dates
+
+# Sorting
+
+
+# Adding and Removing Columns
+
+
+# Recoding/Replacing Values
+
+
+# Aggregating 
+
+
+# Apply Functions
+
+
+
+# Setup
+
+For the sections below, we'll use a built in data set, `mtcars`
+
+```{r}
+data(mtcars)
+head(mtcars)
+```
+
+
+# Explore Data
+
+## First Steps
+
+We've covered some simple measures before, like `mean` and `summary`:
+
+```{r}
+mean(mtcars$mpg)
+summary(mtcars$mpg)
+```
+
+And we've made frequency tables of values:
+
+```{r}
+table(mtcars$gear)
+```
+
+Although we can go beyond 1 variable to 2 or 3:
+
+```{r}
+table(mtcars$gear, mtcars$am) # rows, cols
+```
+
+`ftable` makes output for 3 dimension tables a bit easier to read
+
+```{r}
+ftable(mtcars$gear, mtcars$am, mtcars$cyl) # rows, subrows, columns
+```
+
+or proportion tables:
+
+```{r}
+prop.table(table(mtcars$gear))
+```
+
+
+And we've learned we can group our data and summarize by group too
+
+```{r}
+mtcars %>%
+  group_by(am) %>%
+  summarize(mean(mpg),
+            mean(hp)) 
+```
+
+What else can we do?
+
+
+# Statistics
+
+## Correlation
+
+Correlation between two variables
+
+```{r}
+cor(mtcars$mpg, mtcars$disp)
+```
+
+Or all pairwise comparisons:
+
+```{r}
+cor(mtcars)
+```
+
+Alternatively, covariance
+
+```{r}
+cov(mtcars)
+```
+
+
+## Testing Differences
+
+### T-test
+
+Do manual and automatic transmission cars have different mean miles per gallon?
+
+```{r}
+t.test(mtcars$mpg~mtcars$am)
+```
+
+Think of `~` as "as a function of".  So above, MPG as a function of transmission, meaning grouped by or explained by.
+
+We don't have to use the formula syntax.  We can send data for two different groups:
+
+```{r, eval=FALSE}
+t.test(mtcars$mpg[mtcars$am==0], mtcars$mpg[mtcars$am==1])
+```
+
+In addition to the printout, you can get the various parts of the results
+
+```{r}
+t1 <- t.test(mtcars$mpg~mtcars$am)
+names(t1)
+```
+
+```{r}
+t1$statistic
+```
+
+
+### Regression
+
+Let's predict MPG using a linear model.  First, a simple bivariate regression -- just one explanatory variable.
+
+Basic syntax is 
+
+```{r, eval=FALSE}
+lm(y ~ x1 + x2 + x3, data=df)
+```
+
+
+```{r}
+lm(mpg ~ hp, data=mtcars)
+```
+
+Default output isn't much.  You get a lot more with `summary`:
+
+```{r}
+r1 <- lm(mpg ~ hp, data=mtcars)
+summary(r1)
+```
+
+Note that a constant (Intercept) term was added automatically.
+
+As above, you can pull out the individual components as needed
+
+```{r}
+names(r1)
+```
+
+### Visualizing the result
+
+```{r}
+plot(mtcars$mpg ~ mtcars$hp)
+abline(r1)
+```
+
+Label points with
+
+```{r, eval=FALSE}
+identify(mtcars$hp, mtcars$mpg, 
+         labels=rownames(mtcars))
+```
+
+
+And visualizing diagnostics:
+
+```{r}
+plot(r1)
+```
+
+
+### Additional terms
+
+How do we add more variables?  What about transforming variables?  Here is some of the formula syntax:
+
+Symbol | Example | Description
+-------|-----------|----------------------------------
+`~` | `y ~ x1` | Defines the formula (necessary to create a formula object)
+`+` | `y ~ x1 + x2` | Include the variable
+`-` | `y ~ -1 +x1` | Delete a term, usually a 1 for the intercept
+`:` | `y ~ x1 + x1:x2` | Interaction term 
+`*` | `y ~ x1*x2` | Interaction between the variables and each individually; same as `y ~ x1 + x2 + x1:x2`
+`^` | `y ~ (x1, x2, x3)^3` | Include variables and all interactions, up to 3-way interactions
+`I()` | `y ~ I(x1^2)` | Wrapper for transforming variables without having to create a new variable
+`poly()` | `y ~ poly(x1, 2)` | Creates polynomial terms up to the degree specified 
+
+
+
+We can use `I()` to transform variables as part of the formula syntax.  We can add character or factor variables directly, and R will automatically create dummy (indicator) variables for us.
+
+```{r}
+r2 <- lm(mpg ~ hp + I(hp^2) + am + cyl, data=mtcars)
+summary(r2)
+```
+
+We added cylinders as a numeric variable above, but maybe it should be categorical?  Also, a different way to specify the horsepower terms with `poly`
+
+```{r}
+r3 <- lm(mpg ~ poly(hp, 2, raw=TRUE) + am + I(factor(cyl)), data=mtcars)
+summary(r3)
+```
+
+Note that it picked one group to be the base comparison group, and created variables for the other two.  If, instead of seeing offsets from a base group, we want indicator variables for all groups, we can drop the automatically added intercept term:
+
+```{r}
+r4 <- lm(mpg ~ -1 + poly(hp, 2, raw=TRUE) + am + I(factor(cyl)), data=mtcars)
+summary(r4)
+```
+
+This is also useful if we need to constrain the fitted line to go through the origin.
+
+We can plot fitted values for each variable:
+
+```{r}
+termplot(r4, rug=TRUE)
+```
+
+[More on `termplot`](http://www.clayford.net/statistics/tag/termplot/)
+
+### Predicting values
+
+If we want to predict new values from our fitted model, we can supply a data frame with column names matching the data we used to fit the model.  Let's see how changing hp affects the model.  Hold transmission and cylinders at constant values.
+
+```{r}
+newvals <- data.frame(hp=seq(50,250,10),
+                      am=0,
+                      cyl=4)
+mpg_predict<- predict(r4, newvals)
+mpg_predict
+```
+
+Note that I don't have to transform `hp` or `cyl` before calling `predict`.
+
+```{r}
+plot(mpg_predict ~ newvals$hp, 
+     type="l", lwd=3, col="red", # line style
+     main="am=0; cyl=4") # making note of other values
+points(mtcars$mpg~mtcars$hp)
+```
+
+

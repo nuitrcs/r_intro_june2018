@@ -330,6 +330,8 @@ Hint 3: Use `match` to get the index position of a value in a vector.
 
 Hint 4: `strsplit` -- you can split on an empty string `''`
 
+Note: the answer provided doesn't use it, but the `chartr` function might be useful.
+
 
 ```{asis}
 ### Answer
