@@ -2,7 +2,7 @@
 
 # installing will take a while
 install.packages(c("tidyverse", "data.table", "curl", "gapminder",
-                   "qdapTools", "car", ),
+                   "qdapTools", "car"),
                  repos="http://cran.wustl.edu")
 
 # check by loading packages; you may get some messages, but shouldn't get any errors
