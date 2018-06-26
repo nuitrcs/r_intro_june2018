@@ -25,7 +25,9 @@ Download all of the materials to your laptop.  See [Downloading from GitHub refe
 
 ### Option 2: RStudio Cloud
 
-*Details coming*
+Go to https://rstudio.cloud and log in (or create an account if needed).  Click on Your Workspace in the left Menu.  Then make sure you are on the Projects tab, and click the blue button for New Project.  Choose the option of creating one from a GitHub repo.  The repo address is https://github.com/nuitrcs/r_intro_june2018.  This will take a few moments to copy files from this repository.  You'll then need to install packages.  Open `packagelist.r` and run the code.  The tidyverse package will take a while to install.  
+
+You can use this space like you would your RStudio on own computer, except you can only access the files that are part of the project and save files within the project.
 
 ## Types of Files
 
