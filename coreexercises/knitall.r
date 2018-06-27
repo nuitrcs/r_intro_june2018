@@ -9,10 +9,10 @@ for (iknit in 1:6) {
   rm(list = objs[objs != "iknit"])
   rmarkdown::render(paste0('coreexercises/part',iknit,'_exercises_with_answers.Rmd'),
                     output_file = paste0('part',iknit,'_exercises_with_answers.html'),
-                    params = list(answers=TRUE))
+                    params = list(answers=TRUE), knit_root_dir = getwd())
   objs <- ls()
   rm(list = objs[objs != "iknit"])
   rmarkdown::render(paste0('coreexercises/part',iknit,'_exercises_with_answers.Rmd'),
                     output_file = paste0('part',iknit,'_exercises.html'),
-                    params = list(answers=FALSE))
+                    params = list(answers=FALSE), knit_root_dir = getwd())
 }

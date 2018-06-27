@@ -17,7 +17,6 @@ knitr::opts_chunk$set(echo=TRUE, warning = FALSE, message = FALSE,
 #knitr::opts_knit$set(root.dir=)
 ```
 
-**Note: More exercises coming soon.**
 
 # Setup
 
@@ -174,12 +173,272 @@ meanLifeExp[which.min(meanLifeExp$x),]
 ```
 
 
+# Exercise: Dates, Aggregating
+
+Working with data from the Chicago Park District on park reservations:
+
+```{r}
+parks <- read.csv("data/chicagoparks.csv",
+                  stringsAsFactors = FALSE)
+```
+
+Look at the first few rows of parks.  Then convert the date columns to date objects with lubridate.
+
+Use the `month()` and `year()` functions to make new variables for the parks data based on reservation start date.
+
+Which month has the most reservations?
+
+Which park has the most reservations?
+
+Challenge: What is the most frequent combination of park and event type?
+
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+head(parks)
+library(lubridate)
+parks$Reservation.Start.Date <- mdy(parks$Reservation.Start.Date)
+parks$Reservation.End.Date <- mdy(parks$Reservation.End.Date)
+
+parks$month <- month(parks$Reservation.Start.Date)
+parks$year <- year(parks$Reservation.Start.Date)
+
+sort(table(parks$month))
+
+head(sort(table(parks$Park.Facility.Name), decreasing = TRUE))
+
+# challenge: there are other ways to do this
+park_type <- aggregate(parks[,1], by=list(park=parks$Park.Facility.Name, 
+                                          event=parks$Event.Type),
+                       length)
+head(park_type[order(park_type$x, decreasing=TRUE),])
+```
+
+
+# Exercise: Sorting, Adding and Removing Columns
+
+We're going to use data from the World Cup.  
+
+Prior to 2002, the following variables weren't recorded consistenty: Shots on goal, Shots wide, Free kicks, Offside, Corners
+
+```{r}
+worldcup <- read.csv("data/worldcup.csv",na.strings = c("", "-"),
+                     stringsAsFactors = FALSE)
+```
+
+Set observations before 2002 for the variables that weren't consistently coded to NA.
+
+Make a new variable total shots that adds the two shot columns.  
+
+Make a new variable for shot accuracy that is the number of goals for divided by the total number of shots
+
+Strip the write space (hint: `trimws`) from the Team and ISO code variables
+
+Drop the ISO code column
+
+Make a new variable with total goals scored by country.  Sort it to find out which country has scored the most goals.  
+
+Sort the whole world cup data frame by shot accuracy, so that more accurate teams (team, year) are at the top.
+
+
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+worldcup$Shots.on.goal[worldcup$Year < 2002] <- NA
+worldcup$Shots.wide[worldcup$Year < 2002] <- NA
+worldcup$Free.kicks[worldcup$Year < 2002] <- NA
+worldcup$Offside[worldcup$Year < 2002] <- NA
+worldcup$Corners[worldcup$Year < 2002] <- NA
+
+worldcup$totalshots <- worldcup$Shots.on.goal + worldcup$Shots.wide
+worldcup$shot_accuracy <- worldcup$Goals.for/worldcup$totalshots
+
+worldcup$Team <- trimws(worldcup$Team)
+worldcup$ISO.code <- trimws(worldcup$ISO.code)
+
+worldcup <- worldcup[,-3]
+
+country_goals <- tapply(worldcup$Goals.for, worldcup$Team, sum)
+sort(country_goals)
+
+head(worldcup[order(worldcup$shot_accuracy, decreasing = TRUE),])
+```
+
+
+
+
+# Exercise: Recoding/Replacing Values
+
+Working with data on Chipotle online orders:
+
+```{r}
+chipotle <- read.csv("data/chipotle.tsv", stringsAsFactors = FALSE, sep="\t",
+                     na.strings = c("NULL"))
+DT::datatable(chipotle, rownames = FALSE)
+```
+
+Convert the `item_total_price` column to a number so you can work with it.  
+
+1) Replace the `"$"` with an empty string `""`.  You can use the `sub()` function for this, or `stringr:str_replace_all()`  For the "pattern" argument in either function, use `"\\$"` as the pattern, because $ is a special charcter in string patterns.  Or you could use use `substr()` to exclude the first character in the string (`nchar()` is a function to get the number of characters in a string).  
+
+2) Use the `as.numeric` function to convert the character data to a number.
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+chipotle$item_total_price <- sub("\\$", "", chipotle$item_total_price)
+chipotle$item_total_price <- as.numeric(chipotle$item_total_price)
+```
+
+```{asis, echo=answers, eval=answers}
+Alternatives:
+```
+
+```{r, echo=answers, eval=FALSE}
+chipotle$item_total_price <- stringr::str_replace_all(chipotle$item_total_price, "\\$", "")
+chipotle$item_total_price <- as.numeric(chipotle$item_total_price)
+
+
+chipotle$item_total_price <- substr(chipotle$item_total_price, 2, nchar(chipotle$item_total_price))
+chipotle$item_total_price <- as.numeric(chipotle$item_total_price)
+```
+
+
+# Exercise: Aggregating 
+
+Using the transformed chipotle data from above, compute the following, use `aggregate` where appropriate:
+
+* Average cost per order: note that there are multiple rows (items) for some orders
+* Find the order that cost the most; look at the items in the order  Hint: if you use `tapply()` you may want to reference the names of the vector.
+* Find the order with the most items in it; look at the items in the order
+
+```{asis, echo=answers, eval=answers}
+### Answer
+
+```
+
+
+```{r, echo=answers, eval=FALSE}
+total_per_order <- aggregate(chipotle$item_total_price, by=list(chipotle$order_id), sum)
+max(total_per_order$x)
+total_per_order[which.max(total_per_order$x),]
+chipotle[chipotle$order_id == total_per_order[which.max(total_per_order$x), 1], ]
+items_per_order <- aggregate(chipotle$quantity, by=list(chipotle$order_id), sum)
+items_per_order[which.max(items_per_order$x),]
+chipotle[chipotle$order_id == items_per_order[which.max(items_per_order$x), 1], ]
+```
+
+
+
+# Exercise: Apply Functions
+
+Load data on alcohol consumption by country:
+
+```{r}
+alcohol <- read.csv("https://raw.githubusercontent.com/justmarkham/DAT8/master/data/drinks.csv",
+                    stringsAsFactors = FALSE,
+                    na.strings = c("")) # NOT NA, because that is the code for North America
+```
+
+Use apply functions to help you find:
+
+* Which continent drinks the most beer?  Is this different for wine?
+* For each country, what is their most consumed alcohol type (beer, wine, spirits)? Create a new variable
+* Challenge: What is the most common favorite type across countries?  Hint: there is no function for finding the modal value in base R.  There are functions in some packages though.  Solving this will take some internet searches to find these functions or advanced work with lists or custom functions.
+  * Is the result for North American surprising to you?  View the data to see if you can figure out why the favorite is the favorite.
+
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+avg_beer <- tapply(alcohol$beer_servings, alcohol$continent, mean)
+sort(avg_beer)
+avg_wine <- tapply(alcohol$wine_servings, alcohol$continent, mean)
+sort(avg_wine)
+alcohol$favorite <- apply(alcohol[, 2:4], 1, which.max)
+alcohol$favorite <- c("beer", "spirits", "wine")[alcohol$favorite] # there are other ways to do this recoding
+table(alcohol$favorite)
+```
+
+
+```{r, echo=answers, eval=answers}
+# Challenge
+library(raster)
+favorite_type <- tapply(alcohol$favorite, alcohol$continent, modal)
+```
+
+
+# Exercise: t-test, correlation
+
+Using the alcohol data and some of the variables you computed above, do North American countries drink less beer on average than South American countries?
+
+What are the pairwise correlations between consumption of beer, wine, and spirits?
+
+```{asis, echo=answers, eval=answers}
+### Answer
+```
+
+```{r, echo=answers, eval=answers}
+t.test(alcohol$beer_servings[alcohol$continent=="NA"],
+       alcohol$beer_servings[alcohol$continent=="SA"])
+cor(alcohol[,2:4])
+```
+
+
+
+
+
+# Challenge Exercise: Create indicator variables
+
+Following the example in the code in `exercises/exerciseA.R`, make indicator variables for all of the different ingredients in the `choice_description` column of the chipotle data.  Use a linear regression model to predict the `item_total_price` (normalize by `quantity` first) using the item type and indicator for guacamole for burritos and bowls.  How much does guacamole cost?
+
+Then check this by looking at the cost of guacamole by gettign the average price per item according to whether or not Guacamole was included.  Use the `aggregate` function.
+
+
+```{asis, echo=answers, eval=answers}
+### Answer
+
+There are few ingredients that seem to be duplicates of each other with slightly different names, but we're going to ignore that for now.
+
+This is just one answer.  There are other ways to do this, especially if you use packages and functions we didn't cover.
+```
+
+```{r, echo=answers, eval=answers}
+library(qdapTools)
+ingredients <- mtabulate(strsplit(chipotle$choice_description, ", "))
+chipotle <- cbind(chipotle, ingredients)
+chipotle$burrito_or_bowl <- stringr::str_detect(chipotle$item_name, "Burrito|Bowl")
+chipotle$single_price <- chipotle$item_total_price/chipotle$quantity
+
+# regression
+lm(single_price ~ item_name + Guacamole, data=chipotle, subset=chipotle$burrito_or_bowl)
+
+# aggregate
+avg_costs <- aggregate(chipotle$single_price[chipotle$burrito_or_bowl], 
+                       by=list(item=chipotle$item_name[chipotle$burrito_or_bowl], 
+                               guac=chipotle$Guacamole[chipotle$burrito_or_bowl]), mean)
+avg_costs <- avg_costs[order(avg_costs$item, avg_costs$guac),]
+guac_diff <- avg_costs[seq(2, nrow(avg_costs), 2),3]-avg_costs[seq(1, nrow(avg_costs), 2),3]
+mean(guac_diff)
+```
+
+
 
 # Challenge Exercise: Complex Group Summary
 
 Find all countries where life expectancy increased by at least 60% from 1952 to 2007.
 
-Hint: you might find the `merge` function useful.
+Hint: you might find the `merge` function useful.  One way to approach this would be to make a data frame with the 1952 data, another with the 2007 data, and then merge them together.  There are, however, other ways to proceed.  
 
 ```{asis, echo=answers, eval=answers}
 ### Answer
