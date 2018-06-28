@@ -24,23 +24,210 @@ notes<-params$notes
 
 # Dates
 
+I highly recommend you use the lubridate package for dates.
+
+```{r}
+library(lubridate)
+```
+
+To convert character data to dates, determine the order that the year, month, and day appear in.  Then use the lubridate function that corresponds to the order:
+
+```{r}
+mdy("01/31/2018")
+ymd("2018-01-31")
+```
+
+The delimiters don't matter. There are functions that have a time component too.
+
+There are also functions to get date components:
+
+```{r}
+d1 <- mdy("01/31/2018")
+month(d1)
+year(d1)
+wday(d1, label=TRUE)
+```
+
+You can do math with dates:
+
+```{r}
+today() - d1
+```
+
+When plotting, having dates as Date objects will result in a date axis being plotted properly.
+
 # Sorting
+
+The `sort()` function reorders elements:
+
+```{r}
+x <- c(3,6,2,3)
+sort(x)
+sort(x, decreasing=TRUE)
+```
+
+The `order()` function gives you the index positions in sorted order:
+
+```{r}
+order(x)
+x[order(x)]
+order(x, decreasing=TRUE)
+```
+
+`order()` is useful for arranging data frames:
+
+```{r}
+head(mtcars[order(mtcars$mpg, decreasing=TRUE), c("mpg","hp")])
+```
+
+You can give multiple variables to order:
+
+```{r}
+head(mtcars[order(mtcars$cyl, mtcars$mpg, decreasing=TRUE), c("cyl","mpg","hp")])
+```
+
+Sorting a table is often useful
+
+```{r}
+sort(table(mtcars$cyl))
+```
+
 
 
 # Adding and Removing Columns
 
+```{r}
+df1 <- data.frame(letters=letters,
+                  idx=1:26,
+                  rand=rnorm(26))
+head(df1)
+```
+
+You can add a column by naming it and assigning to it:
+
+```{r}
+df1$rand2 <- sample(1:26, 26, replace=TRUE)
+head(df1)
+```
+
+Or using the cbind function for multiple columns at once (or data frames) -- they need to have the same number of rows.
+
+```{r}
+df2 <- cbind(df1, positive1=df1$rand > 0, 
+             vowel=df1$letters %in% c('a','e','i','o','u'))
+head(df2)
+```
+
+```{r}
+df2 <- data.frame(l1=LETTERS, l2="cats")
+head(df2)
+head(cbind(df1, df2))
+```
+
+To remove a column, resave the data frame with the column(s) excluded (or just select the ones you want)
+
+```{r}
+df1 <- df1[,-4]
+head(df1)
+```
+
+
+# Subset
+
+The `subset()` function lets you select rows and columns you want to keep:
+
+```{r, eval=FALSE}
+subset(data.frame, 
+       subset=condition for rows to keep,
+       select=columns to keep)
+```
+
+You don't have to quote variable names or prefix with name of the data frame
+
+```{r}
+subset(mtcars,
+       subset=cyl==6,
+       select=c(cyl, mpg, hp))
+```
+
+You don't have to use both subset and select arguments -- you can omit one of them if not relevant.
 
 # Recoding/Replacing Values
 
+To recode a variable, you could make a new column, or overwrite the existing one entirely:
+
+```{r}
+mtcars2 <- mtcars
+mtcars2$mpg <- round(mtcars2$mpg)
+```
+
+If you just want to replace part of a column (or vector), you can assign to a subset
+
+```{r}
+df1 <- data.frame(letters=letters,
+                  idx=1:26,
+                  rand=rnorm(26),
+                  stringsAsFactors = FALSE)
+head(df1)
+df1$letters[df1$letters %in% c("a","e","i","o","u")] <- "*"
+head(df1)
+```
+
+There's also a `recode()` function in the `car` library.  You specify the reassignment of values in a string
+
+```{r}
+library(car)
+df1 <- data.frame(letters=letters,
+                  idx=1:26,
+                  rand=rnorm(26),
+                  stringsAsFactors = FALSE)
+df1$letters <- recode(df1$letters, 'c("a","e","i","o","u")="*"')
+df1$letters
+```
+
+The `ifelse` function, covered in Part 6, is also useful for recoding.
 
 # Aggregating 
+
+To compute summary statistics by groups in the data, one option is to use the `aggregate` function:
+
+```{r}
+aggregate(mtcars$mpg, by=list(cyl=mtcars$cyl), mean)
+```
+
+```{r}
+aggregate(mtcars$mpg, by=list(cyl=mtcars$cyl, gear=mtcars$gear), mean)
+```
 
 
 # Apply Functions
 
+The apply functions can also be used for computing aggregates by groups.  There are multiply apply functions that will map/apply a function over a vector, data frame, list, etc. and create an output vector, data frame, list of the results.  Two common apply functions are `apply()` for applying to the rows or columns of a data frame or matrix, and `tapply()` for applying a function to a vector based on groups determined by another vector:
+
+```{r}
+df2<-data.frame(r1=rnorm(10), r2=rnorm(10), r3=rnorm(10))
+apply(df2, 1, max) # 1 is for rows
+apply(df2, 2, max) # 2 is for columns
+```
+
+You could use apply on a subset of columns too, which is useful with data frames that may have mixed columns, when you just want to work with certain column types:
+
+```{r}
+apply(df2[,1:2], 1, max)
+```
+
+`tapply()` instead of taking 1 for rows or 2 for margins, takes another vector that determines groups:
+
+```{r}
+tapply(mtcars$mpg, mtcars$cyl, mean)
+```
+
+The first argument can only be a single vector though, not a data frame or matrix.
 
 
-# Setup
+# Statistics
+
+## Setup
 
 For the sections below, we'll use a built in data set, `mtcars`
 
@@ -50,9 +237,7 @@ head(mtcars)
 ```
 
 
-# Explore Data
-
-## First Steps
+## Tables
 
 We've covered some simple measures before, like `mean` and `summary`:
 
@@ -85,20 +270,6 @@ or proportion tables:
 prop.table(table(mtcars$gear))
 ```
 
-
-And we've learned we can group our data and summarize by group too
-
-```{r}
-mtcars %>%
-  group_by(am) %>%
-  summarize(mean(mpg),
-            mean(hp)) 
-```
-
-What else can we do?
-
-
-# Statistics
 
 ## Correlation
 
@@ -158,9 +329,10 @@ Let's predict MPG using a linear model.  First, a simple bivariate regression --
 Basic syntax is 
 
 ```{r, eval=FALSE}
-lm(y ~ x1 + x2 + x3, data=df)
+lm(y ~ x1 + x2 + x3, data=df_name)
 ```
 
+Example: 
 
 ```{r}
 lm(mpg ~ hp, data=mtcars)
@@ -272,4 +444,92 @@ plot(mpg_predict ~ newvals$hp,
 points(mtcars$mpg~mtcars$hp)
 ```
 
+
+
+# Probability Distributions
+
+R knows about a lot of probability distributions:
+
+```{r, eval=FALSE}
+help(Distributions)
+```
+
+For each distribution, there are 4 function: dxxx, pxxx, qxxx and rxxx, where xxx is the name for the distribution. Take the normal distribution as an example.
+
+By default, the normal distribution functions use the distribution with mean=0 and standard deviation (sd)=1.  You can change these for different variations on the distribution.
+
+## `dnorm`
+
+First, there is a function to get the density of the probability distribution (the [PDF](https://en.wikipedia.org/wiki/Probability_density_function)):
+
+```{r}
+vals<-seq(-4, 4, .2) # this makes a vector with a sequence of numbers from -4 to 4 in it
+data.frame(vals=vals, pdf=dnorm(vals))
+```
+
+Looking at the data, the pdf peaks at 0 (the mean), and decreases symetrically away from 0. Plot this:
+
+```{r}
+plot(dnorm(vals) ~ vals, type="l")
+```
+
+It looks like what you expect for the normal distribution.  `dnorm` is mostly commonly used for drawing the distribution -- you don't usually need to compute the value of the PDF at a specific point otherwise.
+
+## `pnorm`
+
+`pnorm` tells us how likely it is (the probability) that a random draw from the distribution would be a value less than or equal to the number supplied -- this is the area under the PDF curve.  The return value will range between 0 and 1:
+
+```{r}
+vals<-seq(-3,3,.2)
+data.frame(vals=vals, prob=pnorm(vals))
+```
+
+It's always increasing (since as you move right on the number line you're always increasing the probability that a random draw would be less than or equal to the value), and `pnorm(0)` is 0.5 -- since there's a 50/50 chance that a random draw would be to the left of the mean.  If you plot the results of `pnorm`, you get the [CDF](https://en.wikipedia.org/wiki/Cumulative_distribution_function):
+
+```{r}
+plot(pnorm(vals)~vals, type="l")
+```
+
+You would use pnorm when looking up the probability of getting a particular value (such as a test statistic that follows a normal distribution).  You can get the probability of a random draw being to the right of the specified value instead with `lower.tail`:
+
+```{r, results="hold"}
+pnorm(1.6)
+pnorm(1.6, lower.tail=FALSE)
+```
+
+## `qnorm`
+
+`qnorm` is the opposite of `pnorm` -- it tells you what value you need such that you have the supplied probability of a random draw being less than or equal to (to the left of) that value from the distribution.  For example, if you want to know what value you need such that there's a 95% chance that a random draw would be less than or equal to the number:
+
+```{r}
+qnorm(0.95)
+```
+
+You need a value of 1.64.  Random draws from a normal distribution with mean=0 and standard deviation=1 will be less than or equal to 1.64 95% of the time.
+
+The value you supply to `qnorm` must be between 0 and 1.  There's no limit on the range of the return value.
+
+Again, `pnorm` and `qnorm` are opposites:
+
+```{r, results='hold'}
+qnorm(pnorm(2))
+pnorm(qnorm(.8))
+```
+
+## `rnorm`
+
+The last function is to generate random draws from the distribution.  Tell it how many random draws you want:
+
+```{r}
+rnorm(10)
+```
+
+If you want to make sure we get the same sequence of random numbers each time (or as someone else), you can set the seed with any integer value:
+
+```{r}
+set.seed(12345)
+rnorm(10)
+```
+
+This is useful for running simulations when you need to sample from a distribution.
 

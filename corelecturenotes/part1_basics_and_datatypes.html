@@ -11,7 +11,7 @@
 
 <meta name="author" content="Christina Maimone" />
 
-<meta name="date" content="2018-06-25" />
+<meta name="date" content="2018-06-27" />
 
 <title>Intro to R: Fundamentals and Data Types</title>
 
@@ -222,7 +222,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Intro to R: Fundamentals and Data Types</h1>
 <h4 class="author"><em>Christina Maimone</em></h4>
-<h4 class="date"><em>2018-06-25</em></h4>
+<h4 class="date"><em>2018-06-27</em></h4>
 
 </div>
 
@@ -539,12 +539,12 @@ rm(myVariable)</code></pre>
 <pre class="r"><code>install.packages(&quot;tidyverse&quot;, repos=&quot;http://cran.wustl.edu/&quot;)</code></pre>
 <p>After you install a package, you have to load it with the <code>library</code> function to actually use it.</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 2.2.1     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.5
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <p>A note on <code>tidyverse</code>: when you install <code>tidyverse</code>, it installs more packages than are loaded with <code>library(tidyerse)</code>. One example is <code>lubridate</code>. It was installed with <code>tidyverse</code>, but you’ll have to load it separately to use it: <code>library(lubridate)</code>.</p>
