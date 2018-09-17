@@ -1,23 +1,16 @@
 # Intro to R Workshop Materials
 
-Northwestern IT [Research Computing Services](http://www.it.northwestern.edu/research/) 
+Northwestern IT [Research Computing Services](http://www.it.northwestern.edu/research/)
 
-*Note: materials will be updated before the September 2018 workshop.*
+NOTE: Workshop materials may be updated before the next workshop date.  You may want to wait to download materials until close to the workshop date (or the morning of) to get the most current version.
 
 # Software and Files
 
 ## R and RStudio
 
-This workshop assumes you have recent versions of R and RStudio - R 3.4 or 3.5 and RStudio 1.1.  R and RStudio installation notes are in the [main R workshop repository](https://github.com/nuitrcs/rworkshops) or the [summer workshop page](https://sites.northwestern.edu/summerworkshops/resources/software-installation/).  
+This workshop assumes you have recent versions of R and RStudio - R 3.4 or 3.5 and RStudio 1.1.  [R and RStudio installation instructions](https://nuitrcs.github.io/workshop-logistics/install/r/).  
 
-If you normally connect to the Northwestern wireless network, then that's all you need to do before the workshop.  This workshop downloads packages and data files from the internet as we work through the material.
-
-If you do not have a NetID, you may have difficulty accessing the wireless network at Northwestern (the Guest network has some limits on it that can possibly cause issues).    
-
-If you won't be able to connect to the Northwestern network on an independent wireless network during the workshop, OR if you don't have administrator privileges on your laptop, you might want to install some packages ahead of time.  
-
-To do so, start R, then run the commands in `packagelist.r`.   If you need assistance, please contact the workshop instructor before the workshop.
-
+## Workshop Materials
 
 ### Option 1: On your laptop 
 
@@ -28,6 +21,12 @@ Download all of the materials to your laptop.  See [Downloading from GitHub refe
 Go to https://rstudio.cloud and log in (or create an account if needed).  Click on Your Workspace in the left Menu.  Then make sure you are on the Projects tab, and click the blue button for New Project.  Choose the option of creating one from a GitHub repo.  The repo address is https://github.com/nuitrcs/r_intro_june2018.  This will take a few moments to copy files from this repository.  You'll then need to install packages.  Open `packagelist.r` and run the code.  The tidyverse package will take a while to install.  
 
 You can use this space like you would your RStudio on own computer, except you can only access the files that are part of the project and save files within the project.
+
+### Option 3: Quest Analytics Nodes
+
+If you're familiar with git, you can [log in to Quest](https://kb.northwestern.edu/page.php?id=70705) and clone the repository.  Then connect to [RStudio on the Quest Analytics Nodes](https://kb.northwestern.edu/71895) and navigate to the directory.
+
+Alternatively, you can download the files to your laptop, as in option 1 above, then [transfer them to Quest via SFTP](https://kb.northwestern.edu/page.php?id=70521).  Then navigate to the directory after you connect to [RStudio on the Quest Analytics Nodes](https://kb.northwestern.edu/71895).
 
 ## Types of Files
 
