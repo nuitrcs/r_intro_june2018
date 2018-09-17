@@ -33,7 +33,8 @@ safi[,c("village","no_membrs")]
 safi[1,]
 
 # Drop the instanceID column
-safi <- safi[,-ncol(safi)]
+safi <- safi[,-match("instanceID", names(safi))]
+# safi <- safi[,-ncol(safi)]
 
 # select the column respondent_wall_type for just the rows where the village is God
 safi[safi$village == "God", "respondent_wall_type"]

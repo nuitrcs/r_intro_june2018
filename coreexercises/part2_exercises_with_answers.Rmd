@@ -132,7 +132,7 @@ tmp[which.max(tmp$hp),]
 
 # Challenge Exercise: Use `subset`
 
-Look up the help for the `subset` function.  Can you use it to repeat some of the operations in the two exercises above?
+Look up the help for the `subset` function.  Can you use it to repeat some of the operations in the two exercises above (`subset` is not appropriate for all operations above)?
 
 Note: we'll cover this function later in the workshop.
 

@@ -24,7 +24,7 @@ summary(iris)
 iris[1,]
 
 iris[,1]
-iris[1]
+iris[1] # no, not good practice
 
 iris[2:4, 3:5]
 
@@ -39,6 +39,7 @@ iris[,c("Sepal.Length", "Sepal.Width")]
 iris$Petal.Width/2
 
 oldnames <- names(iris)
+names(iris)[1] <- "boo"
 names(iris) <- c("sl","sw", "pl","pw","s")
 head(iris)
 
@@ -49,7 +50,7 @@ rownames(iris)
 
 
 iris[iris$Sepal.Length < 5]
-iris[iris$Sepal.Length < 5,]
+iris[iris$Sepal.Length < 5 & !is.na(iris$Sepal.Length),]
 
 iris[iris$Sepal.Length < 5 & iris$Sepal.Width < 3,]
 
@@ -67,5 +68,9 @@ iris[iris$Species %in% c("setosa", "virginica"),]
 cbind(iris, index=c(1:nrow(iris)))
 
 iris2 <- iris[-nrow(iris),]
+
+iris$index <- 1:nrow(iris)
+
+
 
 

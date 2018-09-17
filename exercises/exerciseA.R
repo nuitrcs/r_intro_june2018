@@ -41,8 +41,11 @@ t.test(safi$months_lack_food_count[safi$village == "Chirodzo"],
        safi$months_lack_food_count[safi$village == "Ruaca"])
 
 # plot distribution of family size
-barplot(table(safi$no_membrs)) # gaps aren't shown
-hist(safi$no_membrs, breaks=1:20-.5, col="gray",
+barplot(table(safi$no_membrs)) # gaps aren't shown, so...
+# option 1
+barplot(table(factor(safi$no_membrs, levels=1:max(safi$no_membrs))))
+# option 2
+hist(safi$no_membrs, breaks=1:2max(safi$no_membrs)-.5, col="gray",
      main="Family Size", xlab="Number of Members",
      ylab="Number of Families")
 
