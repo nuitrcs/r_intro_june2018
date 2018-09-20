@@ -16,11 +16,21 @@ How to get the materials depends on how you plan to access R and RStudio for the
 
 ### Option 1: On your laptop 
 
-If you installed R and RStudio on your laptop, download all of the materials to your laptop.  See [Downloading from GitHub reference](https://sites.northwestern.edu/summerworkshops/resources/downloading-from-github/).
+If you installed R and RStudio on your laptop, download all of the materials to your laptop.  Click on the green Clone or Download button above, then download the repository as a ZIP file.  
+
+![github download](images/githubdownload.png)
+
+Find the downloaded .zip file on your computer, likely in your Downloads folder.  Unzip it - usually by double-clicking.  This will create a directory called r\_intro\_june2018-master.  Move this somewhere on your computer where you'll be able to find it, like your Documents folder.  
+
+You should open the file `r_intro_june2018.Rproj` in this folder to open the materials as an RStudio project.  Double-click on it from your Finder/File Explorer, or from RStudio, File menu > Open Project..., then navigate to the location of the file.
 
 ### Option 2: RStudio Cloud
 
-If you're using RStudio Cloud, go to https://rstudio.cloud and log in (or create an account if needed).  Click on Your Workspace in the left Menu.  Then make sure you are on the Projects tab, and click the blue button for New Project.  Choose the option of creating one from a GitHub repo.  The repo address is https://github.com/nuitrcs/r_intro_june2018.  This will take a few moments to copy files from this repository.  You'll then need to install packages.  Open `packagelist.r` and run the code.  The tidyverse package will take a while to install.  
+If you're using RStudio Cloud, go to https://rstudio.cloud and log in (or create an account if needed).  Click on Your Workspace in the left Menu.  Then make sure you are on the Projects tab, and click down arrow in the blue button for New Project.  Choose the option of New Project from a Git Repo.  The repo address is https://github.com/nuitrcs/r_intro_june2018.  
+
+![rstudio cloud new project](images/rstudiocloud.png)
+
+This will copy all of the files from this repository into your new project.  This will take a few moments to copy files from this repository.  You'll then need to install packages.  Open `packagelist.r` and run the code.  The tidyverse package will take a while to install.  
 
 You can use this space like you would your RStudio on own computer, except you can only access the files that are part of the project and save files within the project.
 
@@ -29,6 +39,8 @@ You can use this space like you would your RStudio on own computer, except you c
 If you're familiar with git, you can [log in to Quest](https://kb.northwestern.edu/page.php?id=70705) and clone the repository.  Then connect to [RStudio on the Quest Analytics Nodes](https://kb.northwestern.edu/71895) and navigate to the directory.  It's easier to find directories in `/home` than in `/projects`
 
 Alternatively, you can download the files to your laptop, as in option 1 above, then [transfer them to Quest via SFTP](https://kb.northwestern.edu/page.php?id=70521); save them somewhere in your `/home` directory, which is where you'll be by default when you connect to Quest via SFTP.  Then navigate to the directory after you connect to [RStudio on the Quest Analytics Nodes](https://kb.northwestern.edu/71895).
+
+Open the workshops materials as a project in RStudio: File menu > Open Project..., then navigate to the location of the file.
 
 ## Types of Files
 
