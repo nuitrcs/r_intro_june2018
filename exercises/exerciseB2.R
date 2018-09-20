@@ -15,7 +15,7 @@ x2 <- rnorm(20, mean=0.5)
 # Trim x2 to the first 5 elements (select first 5 and save back to x2)
 
 
-# Select the last element of x1 
+# Select the last element of x1; hint: use length()  
 
 
 # Select all but the third and fifth elements of x1

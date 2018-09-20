@@ -26,7 +26,7 @@ survey_responses[survey_responses > "sometimes"]
 
 # set the first element of survey_responses to "nearly always"
 # hint: you need to add a level; remake the factor instead of setting only setting levels(survey_responses)
-survey_responses <- factor(survey_responqses, 
+survey_responses <- factor(survey_responses, 
                            levels=c("never", "sometimes", "often", "nearly always", "always"),
                            ordered=TRUE)
 survey_responses[1] <- "nearly always"

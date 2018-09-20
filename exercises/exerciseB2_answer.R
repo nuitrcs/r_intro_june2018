@@ -14,7 +14,7 @@ x2[x2 > 1]
 # Trim x2 to the first 5 elements (select first 5 and save back to x2)
 x2 <- x2[1:5]
 
-# Select the last element of x1 
+# Select the last element of x1; hint: use length() 
 x1[length(x1)]
 
 # Select all but the third and fifth elements of x1
