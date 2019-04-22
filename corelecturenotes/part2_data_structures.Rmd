@@ -256,10 +256,6 @@ mtcars_dt <- as.data.table(mtcars) # mtcars is built-in data
 mtcars_dt[mpg > 20,]  # conditionals without data.table name as a prefix
 ```
 
-If you're working with very large data sets, and performance becomes an issue, then try out `data.table`.  This workshop doesn't cover it, focusing on the tidyverse instead.
-
-[`data.table` cheat sheet](https://s3.amazonaws.com/assets.datacamp.com/blog_assets/datatable_Cheat_Sheet_R.pdf) from DataCamp
-
-[`data.table`](https://github.com/Rdatatable/data.table/wiki) website
+If you're working with very large data sets, and performance becomes an issue, then try out [`data.table`](https://github.com/Rdatatable/data.table/wiki).  This workshop doesn't cover it, focusing on the tidyverse instead.
 
 Note that `data.table` is different from the `DT` package which provides a function `datatable` to work with the JavaScript DataTables package.
