@@ -17,6 +17,4 @@ Exercises or parts marked as "challenge" typically require you to use functions,
 
 Remember: there are other solutions to many of the exercises.  Just because you did it differently, doesn't necessarily mean it's wrong.  
 
-If you're looking for another take on many of the topics covered in the workshop, try the free [DataCamp Intro to R course](https://www.datacamp.com/courses/free-introduction-to-r).
-
 There are additional exercises at https://www.r-exercises.com/start-here-to-learn-r/
